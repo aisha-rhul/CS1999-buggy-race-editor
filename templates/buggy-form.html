@@ -5,12 +5,42 @@
 {% block content %}
 
   <h1>Make buggy</h1>
-  <form action="/new" method="post">
-    <label for="qty_wheels">Number of wheels:</label>
-    <input type="text" name="qty_wheels" />
-    <input type="submit" class="button">
-  </form>
-  <p>
-    <a href="/" class="button">home</a>
-   </p>
+    <form action="/new" method="post">
+      <label for="qty_wheels">Number of wheels:</label>
+      <input type="text" name="qty_wheels" placeholder="Enter a whole number"/>
+      <br>
+      <label for="ppower">Choose Primary Power:</label>
+            <select name="primary_power" id="primary_power">
+              <option value="Petrol">Petrol</option>
+              <option value="Fusion">Fusion</option>
+              <option value="Steam">Steam</option>
+              <option value="Bio">Bio</option>
+              <option value="Electric">Electric</option>
+              <option value="Rocket">Rocket</option>
+              <option value="Hamster">Hamster</option>
+              <option value="Thermo">Thermo</option>
+              <option value="Solar">Solar</option>
+              <option value="Wind">Wind</option>
+            </select>
+           <br><br>
+           <div class="other">
+               <input type="submit" class="button">
+           </div>
+
+    </form>
+    <p>
+        <a href="/" class="button">Home</a>
+    </p>
+
+
+      <!--
+      <span class="tab"></span>
+      <p>Please select a primary motive power:</p>
+      <input type="radio" id="solar" name="primary" value="solar">
+      <label for="solar">Solar</label><br>
+    </form>
+    -->
+
+
+
 {% endblock %}
