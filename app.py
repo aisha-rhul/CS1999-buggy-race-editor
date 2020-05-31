@@ -11,6 +11,11 @@ DEFAULT_BUGGY_ID = "1"
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
 
+def change_on_off(status):
+    if status == 'on':
+        return 'True'
+    else:
+        return 'False'
 # ------------------------------------------------------------
 # the index page
 # ------------------------------------------------------------
@@ -36,21 +41,31 @@ def create_buggy():
         msg = ""
         try:
             qty_wheels = request.form['qty_wheels']
-            primary_power = request.form['primary_power']
+            power_type = request.form['power_type']
+
+            power_units = request.form['power_units']
+            aux_power_type = request.form['aux_power_type']
+
+            aux_power_units = request.form['aux_power_units']
 
             msg = f"qty_wheels={qty_wheels}"
 
             with sql.connect(DATABASE_FILE) as con:
                 cur = con.cursor()
-                cur.execute("UPDATE buggies set qty_wheels=? WHERE id=?", (qty_wheels, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE buggies set primary_power=? WHERE id=?", (primary_power, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set qty_wheels=? WHERE id=?", (qty_wheels, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set power_type=? WHERE id=?", (power_type, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set power_units=? WHERE id=?", (power_units, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set aux_power_type=? WHERE id=?", (aux_power_type, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set aux_power_units=? WHERE id=?", (aux_power_units, DEFAULT_BUGGY_ID))
+
+
                 con.commit()
                 msg = "Record successfully saved"
         except:
             con.rollback()
             msg = "error in update operation"
         finally:
-            con.close()
+            #con.close()
             return render_template("updated.html", msg=msg)
 
 
@@ -64,7 +79,7 @@ def show_buggies():
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
     cur = con.cursor()
-    cur.execute("SELECT * FROM buggies")
+    cur.execute("SELECT * FROM Buggy")
     record = cur.fetchone();
     return render_template("buggy.html", buggy=record)
 
@@ -81,7 +96,7 @@ def edit_buggy():
 # ------------------------------------------------------------
 # get JSON from current record
 #   this is still probably right, but we won't be
-#   using it because we'll be dipping diectly into the
+#   using it because we'll be dipping directly into the
 #   database
 # ------------------------------------------------------------
 @app.route('/json')
@@ -89,7 +104,7 @@ def summary():
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
     cur = con.cursor()
-    cur.execute("SELECT * FROM buggies WHERE id=? LIMIT 1", (DEFAULT_BUGGY_ID))
+    cur.execute("SELECT * FROM Buggy WHERE id=? LIMIT 1", (DEFAULT_BUGGY_ID))
     return jsonify(
         {k: v for k, v in dict(zip(
             [column[0] for column in cur.description], cur.fetchone())).items()
@@ -110,7 +125,7 @@ def delete_buggy():
         msg = "deleting buggy"
         with sql.connect(DATABASE_FILE) as con:
             cur = con.cursor()
-            cur.execute("DELETE FROM buggies")
+            cur.execute("DELETE FROM Buggy")
             con.commit()
             msg = "Buggy deleted"
     except:

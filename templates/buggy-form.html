@@ -6,11 +6,12 @@
 
   <h1>Make buggy</h1>
     <form action="/new" method="post">
-      <label for="qty_wheels">Number of wheels:</label>
+      <label for="qty_wheels">Number of Wheels:</label>
       <input type="text" name="qty_wheels" placeholder="Enter a whole number"/>
       <br>
-      <label for="ppower">Choose Primary Power:</label>
-            <select name="primary_power" id="primary_power">
+
+      <label for="power_type">Primary Power:</label>
+            <select name="power_type" id="power_type">
               <option value="Petrol">Petrol</option>
               <option value="Fusion">Fusion</option>
               <option value="Steam">Steam</option>
@@ -22,25 +23,41 @@
               <option value="Solar">Solar</option>
               <option value="Wind">Wind</option>
             </select>
-           <br><br>
-           <div class="other">
-               <input type="submit" class="button">
-           </div>
+    <br>
+
+    <label for="power_units">Power Units:</label>
+    <input type="text" name="power_units" placeholder="Enter a whole number"/>
+    <br>
+
+    <label for="aux_power_type">Auxiliary Power:</label>
+        <select name="aux_power_type" id="aux_power_type">
+            <option value="Petrol">Petrol</option>
+            <option value="Fusion">Fusion</option>
+            <option value="Steam">Steam</option>
+            <option value="Bio">Bio</option>
+            <option value="Electric">Electric</option>
+            <option value="Rocket">Rocket</option>
+            <option value="Hamster">Hamster</option>
+            <option value="Thermo">Thermo</option>
+            <option value="Solar">Solar</option>
+            <option value="Wind">Wind</option>
+        </select>
+    <br>
+
+    <label for="aux_power_units">Aux Power Units:</label>
+    <input type="text" name="aux_power_units" placeholder="Enter a whole number"/>
+    <br>
+
+
+    <br>
+       <div class="other">
+           <input type="submit" class="button">
+       </div>
 
     </form>
     <p>
         <a href="/" class="button">Home</a>
     </p>
-
-
-      <!--
-      <span class="tab"></span>
-      <p>Please select a primary motive power:</p>
-      <input type="radio" id="solar" name="primary" value="solar">
-      <label for="solar">Solar</label><br>
-    </form>
-    -->
-
 
 
 {% endblock %}
