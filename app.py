@@ -56,6 +56,8 @@ def create_buggy():
             tyres = request.form['tyres']
             qty_tyres = request.form['qty_tyres']
 
+            armour = request.form['armour']
+
             msg = f"qty_wheels={qty_wheels}"
 
             with sql.connect(DATABASE_FILE) as con:
@@ -71,6 +73,7 @@ def create_buggy():
                 cur.execute("UPDATE Buggy set flag_color_secondary=? WHERE id=?", (flag_color_secondary, DEFAULT_BUGGY_ID))
                 cur.execute("UPDATE Buggy set tyres=? WHERE id=?", (tyres, DEFAULT_BUGGY_ID))
                 cur.execute("UPDATE Buggy set qty_tyres=? WHERE id=?", (qty_tyres, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set armour=? WHERE id=?", (armour, DEFAULT_BUGGY_ID))
 
                 con.commit()
                 msg = "Record successfully saved"
