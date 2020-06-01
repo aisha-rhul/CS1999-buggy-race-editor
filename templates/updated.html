@@ -5,7 +5,10 @@
   <h1>Updated Buggy</h1>
 
   <p>
-    {{ msg }}
+      {% for url in msg %}
+        {{ url }} <br>
+      {% endfor %}
+
   </p>
   <p>
     <a href="/" class="button">home</a>

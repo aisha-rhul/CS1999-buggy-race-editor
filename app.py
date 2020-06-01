@@ -12,17 +12,18 @@ BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
 
 # ------------------------------------------------------------
-# validate integer
+# validate integer: num=number, lower=lower bound check
 # ------------------------------------------------------------
-def validate_integer(num):
+def validate_integer(num, lower):
     try:
         val = int(num)
-        if val >= 0:
+        if val >= lower:
             return True
         else:
             return False
     except ValueError:
         return False
+
 
 # ------------------------------------------------------------
 # the index page
@@ -41,7 +42,7 @@ def home():
 @app.route('/new', methods=['POST', 'GET'])
 def create_buggy():
     mimetypes.add_type("text/css", ".css", True)
-
+    msg = []
     valid_wheels = False
     valid_power = False
     valid_aux_power = False
@@ -50,52 +51,54 @@ def create_buggy():
     valid_attacks = False
     all_valid = False
 
+    msg.append("Invalid data input, record not written to database")
+
     if request.method == 'GET':
         return render_template("buggy-form.html")
     elif request.method == 'POST':
-        print("posted message")
-        msg = ""
-        error = "Invalid data input, numeric value must be an integer >=0. Record not written to database"
         try:
             qty_wheels = request.form['qty_wheels'].strip()
-            valid_wheels = validate_integer(qty_wheels)
-            if not valid_wheels:
-                msg = error
+            valid_wheels = validate_integer(qty_wheels, 4)
+            if not valid_wheels or int(qty_wheels) % 2 != 0:
+                msg.append("Wheels - The number of wheels must be an even integer greater or equal to 4")
 
-            power_type = request.form['power_type']
+            power_type = (request.form['power_type']).lower()
+
             power_units = request.form['power_units'].strip()
-            valid_power = validate_integer(power_units)
+            valid_power = validate_integer(power_units, 1)
             if not valid_power:
-                msg = error
+                msg.append("Power unit - Value must be an integer greater than or equal to 1")
 
-            aux_power_type = request.form['aux_power_type']
+            aux_power_type = request.form['aux_power_type'].lower()
+
             aux_power_units = request.form['aux_power_units'].strip()
-            valid_aux_power = validate_integer(aux_power_units)
+            valid_aux_power = validate_integer(aux_power_units, 0)
             if not valid_aux_power:
-                msg = error
+                msg.append("Aux Power - Value must be an integer greater than or equal to 0")
 
             hamster_booster = request.form['hamster_booster'].strip()
-            valid_hamster = validate_integer(hamster_booster)
+            valid_hamster = validate_integer(hamster_booster, 0)
             if not valid_hamster:
-                msg = error
+                msg.append("Hamster Booster - Value must be an integer greater than or equal to 0")
 
             flag_color = request.form['flag_color']
-            flag_pattern = request.form['flag_pattern']
+            flag_pattern = request.form['flag_pattern'].lower()
             flag_color_secondary = request.form['flag_color_secondary']
+            tyres = request.form['tyres'].lower()
 
-            tyres = request.form['tyres']
             qty_tyres = request.form['qty_tyres'].strip()
-            valid_tyres = validate_integer(qty_tyres)
-            if not valid_tyres:
-                msg = error
+            if validate_integer(qty_wheels, 4):
+                if validate_integer(qty_tyres, 4) and (int(qty_tyres) >= int(qty_wheels)):
+                    valid_tyres = True
+                else:
+                    msg.append("Tyres - Number of Tyres must be an integer greater than or equal to number of wheels")
 
-            armour = request.form['armour']
-
-            attack = request.form['attack']
+            armour = request.form['armour'].lower()
+            attack = request.form['attack'].lower()
             qty_attacks = request.form['qty_attacks'].strip()
-            valid_attacks = validate_integer(qty_attacks)
+            valid_attacks = validate_integer(qty_attacks, 0)
             if not valid_attacks:
-                msg = error
+                msg.append("Attacks - Value must be an integer greater than or equal to 0")
 
             fireproof = 'fireproof' in request.form
             insulated = 'insulated' in request.form
@@ -104,36 +107,35 @@ def create_buggy():
 
             algo = request.form['algo'].lower()
 
-            #msg = f"qty_wheels={qty_wheels}"
-
             if valid_attacks and valid_aux_power and valid_hamster and valid_power and valid_tyres and valid_wheels:
                 all_valid = True
                 with sql.connect(DATABASE_FILE) as con:
                     cur = con.cursor()
-                    cur.execute("UPDATE Buggy set qty_wheels=? WHERE id=?", (qty_wheels, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set qty_wheels=? WHERE id=?", (int(qty_wheels), DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set power_type=? WHERE id=?", (power_type, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set power_units=? WHERE id=?", (power_units, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set power_units=? WHERE id=?", (int(power_units), DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set aux_power_type=? WHERE id=?", (aux_power_type, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set aux_power_units=? WHERE id=?", (aux_power_units, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set hamster_booster=? WHERE id=?", (hamster_booster, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set aux_power_units=? WHERE id=?", (int(aux_power_units), DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set hamster_booster=? WHERE id=?", (int(hamster_booster), DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set flag_color=? WHERE id=?", (flag_color, DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set flag_pattern=? WHERE id=?", (flag_pattern, DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set flag_color_secondary=? WHERE id=?", (flag_color_secondary, DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set tyres=? WHERE id=?", (tyres, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set qty_tyres=? WHERE id=?", (qty_tyres, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set qty_tyres=? WHERE id=?", (int(qty_tyres), DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set armour=? WHERE id=?", (armour, DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set attack=? WHERE id=?", (attack, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set qty_attacks=? WHERE id=?", (qty_attacks, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set qty_attacks=? WHERE id=?", (int(qty_attacks), DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set fireproof=? WHERE id=?", (fireproof, DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set insulated=? WHERE id=?", (insulated, DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set antibiotic=? WHERE id=?", (antibiotic, DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set algo=? WHERE id=?", (algo, DEFAULT_BUGGY_ID))
                     con.commit()
-                    msg = "Record successfully saved"
+                    msg.clear()
+                    msg.append("Record successfully saved")
         except:
             con.rollback()
-            msg = "error in update operation"
+            msg.append("error in update operation")
         finally:
             if all_valid:
                 con.close()
