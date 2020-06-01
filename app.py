@@ -61,6 +61,12 @@ def create_buggy():
             attack = request.form['attack']
             qty_attacks = request.form['qty_attacks']
 
+            fireproof = 'fireproof' in request.form
+            insulated = 'insulated' in request.form
+            antibiotic = 'antibiotic' in request.form
+            banging = 'banging' in request.form
+
+
             msg = f"qty_wheels={qty_wheels}"
 
             with sql.connect(DATABASE_FILE) as con:
@@ -79,6 +85,10 @@ def create_buggy():
                 cur.execute("UPDATE Buggy set armour=? WHERE id=?", (armour, DEFAULT_BUGGY_ID))
                 cur.execute("UPDATE Buggy set attack=? WHERE id=?", (attack, DEFAULT_BUGGY_ID))
                 cur.execute("UPDATE Buggy set qty_attacks=? WHERE id=?", (qty_attacks, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set fireproof=? WHERE id=?", (fireproof, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set insulated=? WHERE id=?", (insulated, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set antibiotic=? WHERE id=?", (antibiotic, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, DEFAULT_BUGGY_ID))
 
                 con.commit()
                 msg = "Record successfully saved"
@@ -86,7 +96,7 @@ def create_buggy():
             con.rollback()
             msg = "error in update operation"
         finally:
-            #con.close()
+            con.close()
             return render_template("updated.html", msg=msg)
 
 
