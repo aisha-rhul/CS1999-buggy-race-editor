@@ -66,6 +66,7 @@ def create_buggy():
             antibiotic = 'antibiotic' in request.form
             banging = 'banging' in request.form
 
+            algo = request.form['algo'].lower()
 
             msg = f"qty_wheels={qty_wheels}"
 
@@ -89,7 +90,7 @@ def create_buggy():
                 cur.execute("UPDATE Buggy set insulated=? WHERE id=?", (insulated, DEFAULT_BUGGY_ID))
                 cur.execute("UPDATE Buggy set antibiotic=? WHERE id=?", (antibiotic, DEFAULT_BUGGY_ID))
                 cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, DEFAULT_BUGGY_ID))
-
+                cur.execute("UPDATE Buggy set algo=? WHERE id=?", (algo, DEFAULT_BUGGY_ID))
                 con.commit()
                 msg = "Record successfully saved"
         except:
