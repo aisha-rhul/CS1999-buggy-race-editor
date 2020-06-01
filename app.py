@@ -53,7 +53,8 @@ def create_buggy():
             flag_pattern = request.form['flag_pattern']
             flag_color_secondary = request.form['flag_color_secondary']
 
-
+            tyres = request.form['tyres']
+            qty_tyres = request.form['qty_tyres']
 
             msg = f"qty_wheels={qty_wheels}"
 
@@ -68,6 +69,8 @@ def create_buggy():
                 cur.execute("UPDATE Buggy set flag_color=? WHERE id=?", (flag_color, DEFAULT_BUGGY_ID))
                 cur.execute("UPDATE Buggy set flag_pattern=? WHERE id=?", (flag_pattern, DEFAULT_BUGGY_ID))
                 cur.execute("UPDATE Buggy set flag_color_secondary=? WHERE id=?", (flag_color_secondary, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set tyres=? WHERE id=?", (tyres, DEFAULT_BUGGY_ID))
+                cur.execute("UPDATE Buggy set qty_tyres=? WHERE id=?", (qty_tyres, DEFAULT_BUGGY_ID))
 
                 con.commit()
                 msg = "Record successfully saved"
