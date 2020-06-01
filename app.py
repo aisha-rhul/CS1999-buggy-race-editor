@@ -57,24 +57,24 @@ def create_buggy():
         msg = ""
         error = "Invalid data input, numeric value must be an integer >=0. Record not written to database"
         try:
-            qty_wheels = request.form['qty_wheels']
+            qty_wheels = request.form['qty_wheels'].strip()
             valid_wheels = validate_integer(qty_wheels)
             if not valid_wheels:
                 msg = error
 
             power_type = request.form['power_type']
-            power_units = request.form['power_units']
+            power_units = request.form['power_units'].strip()
             valid_power = validate_integer(power_units)
             if not valid_power:
                 msg = error
 
             aux_power_type = request.form['aux_power_type']
-            aux_power_units = request.form['aux_power_units']
+            aux_power_units = request.form['aux_power_units'].strip()
             valid_aux_power = validate_integer(aux_power_units)
             if not valid_aux_power:
                 msg = error
 
-            hamster_booster = request.form['hamster_booster']
+            hamster_booster = request.form['hamster_booster'].strip()
             valid_hamster = validate_integer(hamster_booster)
             if not valid_hamster:
                 msg = error
@@ -84,7 +84,7 @@ def create_buggy():
             flag_color_secondary = request.form['flag_color_secondary']
 
             tyres = request.form['tyres']
-            qty_tyres = request.form['qty_tyres']
+            qty_tyres = request.form['qty_tyres'].strip()
             valid_tyres = validate_integer(qty_tyres)
             if not valid_tyres:
                 msg = error
@@ -92,7 +92,7 @@ def create_buggy():
             armour = request.form['armour']
 
             attack = request.form['attack']
-            qty_attacks = request.form['qty_attacks']
+            qty_attacks = request.form['qty_attacks'].strip()
             valid_attacks = validate_integer(qty_attacks)
             if not valid_attacks:
                 msg = error
