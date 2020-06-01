@@ -11,11 +11,19 @@ DEFAULT_BUGGY_ID = "1"
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
 
-def change_on_off(status):
-    if status == 'on':
-        return 'True'
-    else:
-        return 'False'
+# ------------------------------------------------------------
+# validate integer
+# ------------------------------------------------------------
+def validate_integer(num):
+    try:
+        val = int(num)
+        if val >= 0:
+            return True
+        else:
+            return False
+    except ValueError:
+        return False
+
 # ------------------------------------------------------------
 # the index page
 # ------------------------------------------------------------
@@ -34,20 +42,42 @@ def home():
 def create_buggy():
     mimetypes.add_type("text/css", ".css", True)
 
+    valid_wheels = False
+    valid_power = False
+    valid_aux_power = False
+    valid_hamster = False
+    valid_tyres = False
+    valid_attacks = False
+    all_valid = False
+
     if request.method == 'GET':
         return render_template("buggy-form.html")
     elif request.method == 'POST':
         print("posted message")
         msg = ""
+        error = "Invalid data input, numeric value must be an integer >=0. Record not written to database"
         try:
             qty_wheels = request.form['qty_wheels']
+            valid_wheels = validate_integer(qty_wheels)
+            if not valid_wheels:
+                msg = error
+
             power_type = request.form['power_type']
-
             power_units = request.form['power_units']
-            aux_power_type = request.form['aux_power_type']
+            valid_power = validate_integer(power_units)
+            if not valid_power:
+                msg = error
 
+            aux_power_type = request.form['aux_power_type']
             aux_power_units = request.form['aux_power_units']
+            valid_aux_power = validate_integer(aux_power_units)
+            if not valid_aux_power:
+                msg = error
+
             hamster_booster = request.form['hamster_booster']
+            valid_hamster = validate_integer(hamster_booster)
+            if not valid_hamster:
+                msg = error
 
             flag_color = request.form['flag_color']
             flag_pattern = request.form['flag_pattern']
@@ -55,11 +85,17 @@ def create_buggy():
 
             tyres = request.form['tyres']
             qty_tyres = request.form['qty_tyres']
+            valid_tyres = validate_integer(qty_tyres)
+            if not valid_tyres:
+                msg = error
 
             armour = request.form['armour']
 
             attack = request.form['attack']
             qty_attacks = request.form['qty_attacks']
+            valid_attacks = validate_integer(qty_attacks)
+            if not valid_attacks:
+                msg = error
 
             fireproof = 'fireproof' in request.form
             insulated = 'insulated' in request.form
@@ -68,36 +104,39 @@ def create_buggy():
 
             algo = request.form['algo'].lower()
 
-            msg = f"qty_wheels={qty_wheels}"
+            #msg = f"qty_wheels={qty_wheels}"
 
-            with sql.connect(DATABASE_FILE) as con:
-                cur = con.cursor()
-                cur.execute("UPDATE Buggy set qty_wheels=? WHERE id=?", (qty_wheels, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set power_type=? WHERE id=?", (power_type, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set power_units=? WHERE id=?", (power_units, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set aux_power_type=? WHERE id=?", (aux_power_type, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set aux_power_units=? WHERE id=?", (aux_power_units, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set hamster_booster=? WHERE id=?", (hamster_booster, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set flag_color=? WHERE id=?", (flag_color, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set flag_pattern=? WHERE id=?", (flag_pattern, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set flag_color_secondary=? WHERE id=?", (flag_color_secondary, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set tyres=? WHERE id=?", (tyres, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set qty_tyres=? WHERE id=?", (qty_tyres, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set armour=? WHERE id=?", (armour, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set attack=? WHERE id=?", (attack, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set qty_attacks=? WHERE id=?", (qty_attacks, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set fireproof=? WHERE id=?", (fireproof, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set insulated=? WHERE id=?", (insulated, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set antibiotic=? WHERE id=?", (antibiotic, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, DEFAULT_BUGGY_ID))
-                cur.execute("UPDATE Buggy set algo=? WHERE id=?", (algo, DEFAULT_BUGGY_ID))
-                con.commit()
-                msg = "Record successfully saved"
+            if valid_attacks and valid_aux_power and valid_hamster and valid_power and valid_tyres and valid_wheels:
+                all_valid = True
+                with sql.connect(DATABASE_FILE) as con:
+                    cur = con.cursor()
+                    cur.execute("UPDATE Buggy set qty_wheels=? WHERE id=?", (qty_wheels, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set power_type=? WHERE id=?", (power_type, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set power_units=? WHERE id=?", (power_units, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set aux_power_type=? WHERE id=?", (aux_power_type, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set aux_power_units=? WHERE id=?", (aux_power_units, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set hamster_booster=? WHERE id=?", (hamster_booster, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set flag_color=? WHERE id=?", (flag_color, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set flag_pattern=? WHERE id=?", (flag_pattern, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set flag_color_secondary=? WHERE id=?", (flag_color_secondary, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set tyres=? WHERE id=?", (tyres, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set qty_tyres=? WHERE id=?", (qty_tyres, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set armour=? WHERE id=?", (armour, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set attack=? WHERE id=?", (attack, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set qty_attacks=? WHERE id=?", (qty_attacks, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set fireproof=? WHERE id=?", (fireproof, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set insulated=? WHERE id=?", (insulated, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set antibiotic=? WHERE id=?", (antibiotic, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, DEFAULT_BUGGY_ID))
+                    cur.execute("UPDATE Buggy set algo=? WHERE id=?", (algo, DEFAULT_BUGGY_ID))
+                    con.commit()
+                    msg = "Record successfully saved"
         except:
             con.rollback()
             msg = "error in update operation"
         finally:
-            con.close()
+            if all_valid:
+                con.close()
             return render_template("updated.html", msg=msg)
 
 
