@@ -26,6 +26,34 @@ def validate_integer(num, lower):
 
 
 # ------------------------------------------------------------
+# Validate consumable power types
+# ------------------------------------------------------------
+def valid_power_type(power_type, power_units):
+    try:
+        with sql.connect(DATABASE_FILE) as con:
+
+            cur = con.cursor()
+
+            power_type = str(power_type)
+            cur.execute("SELECT consumable FROM Motive_Power WHERE power_type=?", (power_type,))
+
+            for row in cur.fetchall():
+                consumable = str(row[0])
+
+            power_units = int(power_units)
+
+            if consumable == 'false' and power_units > 1:
+                return False
+
+            return True
+
+    except:
+        return 0
+    finally:
+        con.close()
+
+
+# ------------------------------------------------------------
 # the index page
 # ------------------------------------------------------------
 @app.route('/')
@@ -43,12 +71,12 @@ def home():
 def create_buggy():
     mimetypes.add_type("text/css", ".css", True)
     msg = []
-    valid_wheels = False
-    valid_power = False
-    valid_aux_power = False
-    valid_hamster = False
-    valid_tyres = False
-    valid_attacks = False
+    valid_wheels = True
+    valid_power = True
+    valid_aux_power = True
+    valid_hamster = True
+    valid_tyres = True
+    valid_attacks = True
     all_valid = False
 
     msg.append("Invalid data input, record not written to database")
@@ -69,6 +97,9 @@ def create_buggy():
             if not valid_power:
                 msg.append("Power unit - Value must be an integer greater than or equal to 1")
 
+            if not valid_power_type(power_type, power_units):
+                msg.append("Power type/unit - Consumable primary power type can only have one power unit")
+
             aux_power_type = request.form['aux_power_type'].lower()
 
             aux_power_units = request.form['aux_power_units'].strip()
@@ -76,10 +107,21 @@ def create_buggy():
             if not valid_aux_power:
                 msg.append("Aux Power - Value must be an integer greater than or equal to 0")
 
+            if not valid_power_type(aux_power_type, aux_power_units):
+                msg.append("Power type/unit - Consumable auxiliary power type can only have one auxiliary power unit")
+
             hamster_booster = request.form['hamster_booster'].strip()
             valid_hamster = validate_integer(hamster_booster, 0)
             if not valid_hamster:
                 msg.append("Hamster Booster - Value must be an integer greater than or equal to 0")
+
+            if (power_type != "hamster" and aux_power_type != "hamster") and int(hamster_booster) > 0:
+                msg.append("Hamster Booster - can only be set if power type is hamster")
+                valid_hamster = False
+
+            if aux_power_type == "none" and int(aux_power_units) > 0:
+                msg.append("Auxiliary power - cannot be greater than 0 if no auxiliary power is chosen")
+                valid_aux_power = False
 
             flag_color = request.form['flag_color']
             flag_pattern = request.form['flag_pattern'].lower()
@@ -100,6 +142,10 @@ def create_buggy():
             if not valid_attacks:
                 msg.append("Attacks - Value must be an integer greater than or equal to 0")
 
+            if attack == "none" and int(qty_attacks) > 0:
+                msg.append("Attack quantity - cannot be greater than zero when no attack is chosen")
+                valid_attacks = False
+
             fireproof = 'fireproof' in request.form
             insulated = 'insulated' in request.form
             antibiotic = 'antibiotic' in request.form
@@ -107,7 +153,8 @@ def create_buggy():
 
             algo = request.form['algo'].lower()
 
-            if valid_attacks and valid_aux_power and valid_hamster and valid_power and valid_tyres and valid_wheels:
+            if valid_attacks and valid_aux_power and valid_hamster and valid_power and valid_tyres and valid_wheels and \
+                    valid_power_type(power_type, power_units) and valid_power_type(aux_power_type, aux_power_units):
                 all_valid = True
                 with sql.connect(DATABASE_FILE) as con:
                     cur = con.cursor()
