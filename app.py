@@ -54,6 +54,100 @@ def valid_power_type(power_type, power_units):
 
 
 # ------------------------------------------------------------
+# calculate cost of the buggy
+# ------------------------------------------------------------
+def calc_cost():
+    try:
+        with sql.connect(DATABASE_FILE) as con:
+            cur = con.cursor()
+
+            # Get buggy id of the last record
+            cur.execute("SELECT id FROM Buggy ORDER BY id DESC LIMIT 1")
+            for row in cur.fetchall():
+                buggy_id = row[0]
+            buggy_id = str(buggy_id)
+
+            # Get record of last buggy
+            record = []
+            cur.execute("SELECT * FROM Buggy WHERE id=?", buggy_id)
+            for row in cur.fetchall():
+                record = row
+
+            total_cost = 0
+
+            # Cost for primary power type and power units
+            cur.execute("SELECT cost FROM Motive_Power WHERE power_type=?", (record[2],))
+            #Alternative method
+            #cur.execute("SELECT cost FROM 'Motive Power' WHERE power_type=:pt", {"pt": record[2]})
+            for row in cur.fetchall():
+                total_cost += row[0] * record[3]
+
+            # Cost for aux power type and aux power units
+            cur.execute("SELECT cost FROM Motive_Power WHERE power_type=?", (record[4],))
+            for row in cur.fetchall():
+                total_cost += row[0] * record[5]
+
+            # Cost for hamster booster
+            cur.execute("SELECT cost FROM Extras WHERE perk='hamster_booster'")
+            for row in cur.fetchall():
+                total_cost += row[0] * record[6]
+
+            # Cost for tyre type
+            cur.execute("SELECT cost FROM Tyre WHERE type=?", (record[10],))
+            for row in cur.fetchall():
+                total_cost += row[0] * record[11]
+
+            # Cost for armour
+            cur.execute("SELECT cost FROM Armour WHERE type=?", (record[12],))
+            for row in cur.fetchall():
+                if record[1] == 4:
+                    total_cost += row[0]
+                else:
+                    extra_wheels = record[1] - 4
+                    total_cost += row[0] * (1 + (extra_wheels/10))
+
+            # Cost for offensive capability
+            cur.execute("SELECT cost FROM Offensive_Capability WHERE type=?", (record[13],))
+            for row in cur.fetchall():
+                total_cost += row[0] * record[14]
+
+            # Cost for fireproof
+            cur.execute("SELECT cost FROM Extras WHERE perk='fireproof'")
+            for row in cur.fetchall():
+                if record[15] == "true":
+                    total_cost += row[0]
+
+            # Cost for insulated
+            cur.execute("SELECT cost FROM Extras WHERE perk='insulated'")
+            for row in cur.fetchall():
+                if record[16] == "true":
+                    total_cost += row[0]
+
+            # Cost for antibiotic
+            cur.execute("SELECT cost FROM Extras WHERE perk='antibiotic'")
+            for row in cur.fetchall():
+                if record[17] == "true":
+                    total_cost += row[0]
+
+            # Cost for banging
+            cur.execute("SELECT cost FROM Extras WHERE perk='banging'")
+            for row in cur.fetchall():
+                if record[18] == "true":
+                    total_cost += row[0]
+
+            print("Total cost: ")
+            print(total_cost)
+
+            # Update cost in buggy table after calculation
+            cur.execute("UPDATE Buggy set total_cost=? WHERE id=?", (total_cost, buggy_id))
+            con.commit()
+    except:
+        print("Exception")
+    finally:
+        con.close()
+
+
+# ------------------------------------------------------------
 # the index page
 # ------------------------------------------------------------
 @app.route('/')
@@ -146,10 +240,10 @@ def create_buggy():
                 msg.append("Attack quantity - cannot be greater than zero when no attack is chosen")
                 valid_attacks = False
 
-            fireproof = 'fireproof' in request.form
-            insulated = 'insulated' in request.form
-            antibiotic = 'antibiotic' in request.form
-            banging = 'banging' in request.form
+            fireproof = str('fireproof' in request.form).lower()
+            insulated = str('insulated' in request.form).lower()
+            antibiotic = str('antibiotic' in request.form).lower()
+            banging = str('banging' in request.form).lower()
 
             algo = request.form['algo'].lower()
 
@@ -178,6 +272,7 @@ def create_buggy():
                     cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, DEFAULT_BUGGY_ID))
                     cur.execute("UPDATE Buggy set algo=? WHERE id=?", (algo, DEFAULT_BUGGY_ID))
                     con.commit()
+                    calc_cost();
                     msg.clear()
                     msg.append("Record successfully saved")
         except:
