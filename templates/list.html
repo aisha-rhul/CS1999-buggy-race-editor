@@ -1,0 +1,44 @@
+<!doctype html>
+
+{% extends "base.html" %}
+
+{% block scripts %}
+    {{ super() }}
+
+    <link rel="stylesheet" type="text/css" href="/static/css/table.css"/>
+{% endblock %}
+
+{% block content %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <h1>List Buggies</h1>
+
+  <table id="buggies">
+   <tr>
+       <td>ID</td> <td>Wheels</td> <td>Pri Power</td><td>Pri Units</td> <td>Aux Power</td> <td>Aux Units</td>
+       <td>Hamster</td> <td>Flag Col</td> <td>Flag Pattern</td><td>Flag Col 2</td> <td>Tyres</td> <td>#Tyres</td>
+       <td>Armour</td> <td>Attack</td> <td>#Attacks</td><td>Fireproof</td> <td>Insulated</td> <td>Antibiotic</td>
+       <td>Banging</td> <td>Algorithm</td>
+   </tr>
+
+    <tr class = "notfirst">
+       <td> {{ buggy['id'] }} </td><td> {{ buggy['qty_wheels'] }} </td><td> {{ buggy['power_type'] }} </td>
+        <td> {{ buggy['power_units'] }} </td><td> {{ buggy['aux_power_type'] }} </td><td> {{ buggy['aux_power_units'] }} </td>
+        <td> {{ buggy['hamster_booster'] }} </td><td> {{ buggy['flag_color'] }} </td><td> {{ buggy['flag_pattern'] }} </td>
+        <td> {{ buggy['flag_color_secondary'] }} </td><td> {{ buggy['tyres'] }} </td><td> {{ buggy['qty_tyres'] }} </td>
+        <td> {{ buggy['armour'] }} </td><td> {{ buggy['attack'] }} </td><td> {{ buggy['qty_attacks'] }} </td>
+        <td> {{ buggy['fireproof'] }} </td><td> {{ buggy['insulated'] }} </td><td> {{ buggy['antibiotic'] }} </td>
+        <td> {{ buggy['banging'] }} </td><td> {{ buggy['algo'] }} </td>
+    </tr>
+  </table>
+
+  <br>
+
+  <div class="spacer">
+      <a href="/" class="button">Home</a>
+      <a href="#" class="button">Edit</a>
+      <a href="#" class="button">Delete</a>
+  </div>
+
+
+{% endblock %}
