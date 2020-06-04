@@ -305,6 +305,18 @@ def create_buggy():
 
 
 # ------------------------------------------------------------
+# fetch all records from the database
+# ------------------------------------------------------------
+def get_records():
+    con = sql.connect(DATABASE_FILE)
+    con.row_factory = sql.Row
+    cur = con.cursor()
+    cur.execute("SELECT * FROM Buggy")
+    record = cur.fetchone()
+    return record
+
+
+# ------------------------------------------------------------
 # a page for displaying the buggy
 # ------------------------------------------------------------
 @app.route('/buggy')
