@@ -34,9 +34,13 @@
 
   <br>
 
+  <form id="edit" action="/list" method="post">
+      <input type="hidden" value="1" id="selected_id" name="selected_id"/>
+  </form>
+
   <div class="spacer">
       <a href="/" class="button">Home</a>
-      <a href="#" class="button">Edit</a>
+      <a href="#" type="button" id="submit_id" name="submit_id" class="button" onclick="submitID()" value="Submit form">Edit</a>
       <a href="#" class="button">Delete</a>
   </div>
 
