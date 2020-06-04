@@ -26,6 +26,26 @@ def validate_integer(num, lower):
 
 
 # ------------------------------------------------------------
+# get a single buggy record based on the buggy ID
+# ------------------------------------------------------------
+def get_buggy_record(buggy_id):
+    try:
+        with sql.connect(DATABASE_FILE) as con:
+            cur = con.cursor()
+
+            # Get record of buggy
+            record = []
+            cur.execute("SELECT * FROM Buggy WHERE id=?", (buggy_id,))
+            for row in cur.fetchall():
+                record = row
+        return record
+    except:
+        print("Could not locate the record in the database")
+    finally:
+        con.close()
+
+
+# ------------------------------------------------------------
 # Validate consumable power types
 # ------------------------------------------------------------
 def valid_power_type(power_type, power_units):
