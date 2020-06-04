@@ -305,6 +305,15 @@ def create_buggy():
 
 
 # ------------------------------------------------------------
+# a page for listing all buggies in a database
+# ------------------------------------------------------------
+@app.route('/list')
+def display_buggies():
+    record = get_records()
+    return render_template("list.html", title="Make buggy", buggy=record)
+
+
+# ------------------------------------------------------------
 # fetch all records from the database
 # ------------------------------------------------------------
 def get_records():
