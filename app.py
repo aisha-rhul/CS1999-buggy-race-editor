@@ -46,6 +46,25 @@ def get_buggy_record(buggy_id):
 
 
 # ------------------------------------------------------------
+# get last buggy_id
+# ------------------------------------------------------------
+def get_last_buggy_id():
+    try:
+        with sql.connect(DATABASE_FILE) as con:
+            cur = con.cursor()
+            # Get buggy id of the last record
+            cur.execute("SELECT id FROM Buggy ORDER BY id DESC LIMIT 1")
+            for row in cur.fetchall():
+                buggy_id = row[0]
+            buggy_id = int(buggy_id)
+            return buggy_id
+    except:
+        return 0
+    finally:
+        con.close()
+
+
+# ------------------------------------------------------------
 # Validate consumable power types
 # ------------------------------------------------------------
 def valid_power_type(power_type, power_units):
