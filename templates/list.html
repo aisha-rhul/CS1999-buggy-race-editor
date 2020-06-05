@@ -9,6 +9,9 @@
     <script type="text/javascript" src="/static/scripts/jQselector.js"></script>
     <script type="text/javascript" src="/static/scripts/submit.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/table.css"/>
+    <script>
+        let selected_id= 0;
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -54,7 +57,7 @@
   <div class="spacer">
       <a href="/" class="button">Home</a>
       <a href="#" type="button" id="submit_id" name="submit_id" class="button" onclick="submitID()" value="Submit form">Edit</a>
-      <a href="#" class="button">Delete</a>
+      <a href="#" type="button" id="delete_rec" name="delete_rec" class="button" onclick="confirmChoice()" value="Submit form">Delete</a>
   </div>
 
 

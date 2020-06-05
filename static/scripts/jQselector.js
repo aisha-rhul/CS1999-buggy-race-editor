@@ -1,7 +1,7 @@
 window.onload = function () {
    $("#buggies tr").click(function(){
       $(this).addClass('selected').siblings().removeClass('selected');
-
+      selected_id = $(this).find('td:first').html();
       document.getElementById("selected_id").value = $(this).find('td:first').html();
 
       document.getElementById("sel_primary_power").value = $(this).find('td:eq(2)').html();
