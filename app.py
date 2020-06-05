@@ -64,9 +64,7 @@ def valid_power_type(power_type, power_units):
 
             if consumable == 'false' and power_units > 1:
                 return False
-
             return True
-
     except:
         return 0
     finally:
@@ -154,9 +152,6 @@ def calc_cost():
             for row in cur.fetchall():
                 if record[18] == "true":
                     total_cost += row[0]
-
-            print("Total cost: ")
-            print(total_cost)
 
             # Update cost in buggy table after calculation
             cur.execute("UPDATE Buggy set total_cost=? WHERE id=?", (total_cost, buggy_id))
@@ -297,11 +292,44 @@ def create_buggy():
                     msg.append("Record successfully saved")
         except:
             con.rollback()
-            msg.append("error in update operation")
+            msg.append("create_buggy: error in update operation")
         finally:
             if all_valid:
                 con.close()
             return render_template("updated.html", msg=msg)
+
+
+# ------------------------------------------------------------
+# receive selected buggy from user
+# ------------------------------------------------------------
+@app.route('/list', methods=['POST', 'GET'])
+def list_buggies():
+    if request.method == 'POST':
+        try:
+            selection = []
+            buggy_id = request.form['selected_id']
+            selection = {
+                    'sel_primary_power': (request.form['sel_primary_power']).strip(),
+                    'sel_aux_power': (request.form['sel_aux_power']).strip(),
+                    'sel_flag_pattern': (request.form['sel_flag_pattern']).strip(),
+                    'sel_tyre_type': (request.form['sel_tyre_type']).strip(),
+                    'sel_armour': (request.form['sel_armour']).strip(),
+                    'sel_attack': (request.form['sel_attack']).strip(),
+                    'sel_fireproof': (request.form['sel_fireproof']).strip(),
+                    'sel_insulated': (request.form['sel_insulated']).strip(),
+                    'sel_antibiotic': (request.form['sel_antibiotic']).strip(),
+                    'sel_banging': (request.form['sel_banging']).strip(),
+                    'sel_algo': (request.form['sel_algo']).strip(),
+                    }
+            print(selection)
+        except:
+            print("list_buggies: error in update operation")
+        finally:
+            record = get_buggy_record(str(buggy_id))
+            return render_template("edit-record.html", title="Edit buggy", bid=buggy_id, sel=selection, buggy=record)
+    else:
+        all_records = get_records()
+    return render_template("list.html", buggy=all_records)
 
 
 # ------------------------------------------------------------
@@ -321,7 +349,7 @@ def get_records():
     con.row_factory = sql.Row
     cur = con.cursor()
     cur.execute("SELECT * FROM Buggy")
-    record = cur.fetchone()
+    record = cur.fetchone();
     return record
 
 
@@ -331,12 +359,7 @@ def get_records():
 @app.route('/buggy')
 def show_buggies():
     mimetypes.add_type("text/css", ".css", True)
-
-    con = sql.connect(DATABASE_FILE)
-    con.row_factory = sql.Row
-    cur = con.cursor()
-    cur.execute("SELECT * FROM Buggy")
-    record = cur.fetchone();
+    record = get_records()
     return render_template("buggy.html", buggy=record)
 
 
@@ -346,7 +369,8 @@ def show_buggies():
 @app.route('/new')
 def edit_buggy():
     mimetypes.add_type("text/css", ".css", True)
-    return render_template("buggy-form.html")
+
+    return render_template("buggy-form.html", title="Make buggy")
 
 
 # ------------------------------------------------------------

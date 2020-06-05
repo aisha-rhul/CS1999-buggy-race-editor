@@ -2,6 +2,15 @@
 
 {% extends "base.html" %}
 
+{% block scripts %}
+    {{ super() }}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="/static/scripts/jQselector.js"></script>
+    <script type="text/javascript" src="/static/scripts/submit.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/table.css"/>
+{% endblock %}
+
 {% block content %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -26,10 +35,20 @@
     </tr>
   </table>
 
-  <br>
 
   <form id="edit" action="/list" method="post">
       <input type="hidden" value="1" id="selected_id" name="selected_id"/>
+      <input type="hidden" value="Petrol" id="sel_primary_power" name="sel_primary_power"/>
+      <input type="hidden" value="None" id="sel_aux_power" name="sel_aux_power"/>
+      <input type="hidden" value="Plain" id="sel_flag_pattern" name="sel_flag_pattern"/>
+      <input type="hidden" value="Knobbly" id="sel_tyre_type" name="sel_tyre_type"/>
+      <input type="hidden" value="None" id="sel_armour" name="sel_armour"/>
+      <input type="hidden" value="None" id="sel_attack" name="sel_attack"/>
+      <input type="hidden" value="False" id="sel_fireproof" name="sel_fireproof"/>
+      <input type="hidden" value="False" id="sel_insulated" name="sel_insulated"/>
+      <input type="hidden" value="False" id="sel_antibiotic" name="sel_antibiotic"/>
+      <input type="hidden" value="False" id="sel_banging" name="sel_banging"/>
+      <input type="hidden" value="Steady" id="sel_algo" name="sel_algo"/>
   </form>
 
   <div class="spacer">

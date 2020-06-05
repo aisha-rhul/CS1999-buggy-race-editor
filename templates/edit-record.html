@@ -2,6 +2,16 @@
 
 {% extends "base.html" %}
 
+{% block scripts %}
+    {{ super() }}
+
+    <script type="text/javascript" src="/static/scripts/loadselected.js"></script>
+    <script>
+        let opt = JSON.parse('{{ sel | tojson | safe}}');
+    </script>
+
+{% endblock %}
+
 {% block content %}
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -61,12 +71,12 @@
 
     <label for="flag_pattern">Flag Pattern:</label>
         <select name="flag_pattern" id="flag_pattern" value="{{ buggy[8] }}">
-            <option value="plain">Plain</option>
-            <option value="vstripe">Vstripe</option>
-            <option value="hstripe">Hstripe</option>
-            <option value="dstripe">Dstripe</option>
-            <option value="checker">Checker</option>
-            <option value="spot">Spot</option>
+            <option value="Plain">Plain</option>
+            <option value="Vstripe">Vstripe</option>
+            <option value="Hstripe">Hstripe</option>
+            <option value="Dstripe">Dstripe</option>
+            <option value="Checker">Checker</option>
+            <option value="Spot">Spot</option>
         </select>
     <br>
 
@@ -142,5 +152,8 @@
 
     </form>
 
+    <p>
+        <a href="/" class="button">Home</a>
+    </p>
 
 {% endblock %}
