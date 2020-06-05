@@ -7,6 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <h1>{{title}}</h1>
+
+    <label for="buggy_id">Buggy ID:</label>
+    <input type="text" class="bid" id="buggy_id" name="buggy_id" value="1" disabled>
+    <br>
+
     <form id="new_buggy_form" action="/new" method="post">
       <label for="qty_wheels">Number of Wheels:</label>
       <input type="text" value="4" id="qty_wheels" name="qty_wheels" placeholder="Enter a whole number"/>
