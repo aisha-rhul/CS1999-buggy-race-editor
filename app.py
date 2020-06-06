@@ -348,7 +348,8 @@ def list_buggies():
             return render_template("edit-record.html", title="Edit buggy", bid=buggy_id, sel=selection, buggy=record)
     else:
         all_records = get_records()
-    return render_template("list.html", buggy=all_records)
+    all_records = get_records()
+    return render_template("list.html", buggies=all_records)
 
 
 # ------------------------------------------------------------
@@ -356,8 +357,8 @@ def list_buggies():
 # ------------------------------------------------------------
 @app.route('/list')
 def display_buggies():
-    record = get_records()
-    return render_template("list.html", title="Make buggy", buggy=record)
+    records = get_records()
+    return render_template("list.html", title="Make buggy", buggy=records)
 
 
 # ------------------------------------------------------------
@@ -368,8 +369,8 @@ def get_records():
     con.row_factory = sql.Row
     cur = con.cursor()
     cur.execute("SELECT * FROM Buggy")
-    record = cur.fetchone();
-    return record
+    records = cur.fetchall()
+    return records
 
 
 # ------------------------------------------------------------

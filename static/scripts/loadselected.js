@@ -12,6 +12,10 @@
     document.getElementById("banging").checked=JSON.parse(opt.sel_banging);
 
     document.getElementById("algo").value=capitalise(opt.sel_algo);
+
+    let sel_id = sessionStorage.getItem('buggy_id');
+    document.getElementById("bid").value = sel_id;
+
  }
 
  const capitalise = (str, lower = false) =>

@@ -2,8 +2,9 @@ window.onload = function () {
    $("#buggies tr").click(function(){
       $(this).addClass('selected').siblings().removeClass('selected');
       selected_id = $(this).find('td:first').html();
-      document.getElementById("selected_id").value = $(this).find('td:first').html();
+      sessionStorage.setItem("buggy_id", selected_id);
 
+      document.getElementById("selected_id").value = $(this).find('td:first').html();
       document.getElementById("sel_primary_power").value = $(this).find('td:eq(2)').html();
       document.getElementById("sel_aux_power").value = $(this).find('td:eq(4)').html();
       document.getElementById("sel_flag_pattern").value = $(this).find('td:eq(8)').html();
@@ -16,11 +17,5 @@ window.onload = function () {
       document.getElementById("sel_banging").value = $(this).find('td:eq(18)').html();
       document.getElementById("sel_algo").value = $(this).find('td:eq(19)').html();
    });
-
-/*
-   $('.submit_id').on('click', function(e){
-       alert($("#buggies tr.selected td:first").html());
-   });
-*/
 
 };
