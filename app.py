@@ -317,7 +317,7 @@ def create_buggy():
             if not valid_aux_power:
                 msg.append("Aux Power - Value must be an integer greater than or equal to 0")
 
-            if aux_power_type != "None" and int(aux_power_units) == 0:
+            if aux_power_type != "none" and int(aux_power_units) == 0:
                 msg.append("Aux Power Units - Cannot be zero when aux power type is chosen")
                 valid_aux_power = False
 
@@ -381,7 +381,7 @@ def create_buggy():
                 # add/update record
                 if action == "create":
                     print("in add record - about to add ...")
-
+                    buggy_id = get_last_buggy_id() + 1
                     # insert record
                     with sql.connect(DATABASE_FILE) as con:
                         cur = con.cursor()
@@ -393,6 +393,8 @@ def create_buggy():
                                      int(aux_power_units), int(hamster_booster), flag_color, flag_pattern,
                                      flag_color_secondary, tyres, int(qty_tyres), armour, attack, int(qty_attacks),
                                      fireproof, insulated, antibiotic, banging, algo))
+                        cur.execute(''' INSERT INTO Ownership (buggy_id, username) VALUES (?, ?)''',
+                                    (buggy_id, username))
                         con.commit()
                         msg.clear()
                         msg.append("New record added to database")
@@ -422,7 +424,6 @@ def create_buggy():
                         cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, buggy_id))
                         cur.execute("UPDATE Buggy set algo=? WHERE id=?", (algo, buggy_id))
                         con.commit()
-                        calc_cost()
                         msg.clear()
                         msg.append("Record successfully saved")
         except:
@@ -430,6 +431,7 @@ def create_buggy():
             msg.append("update_buggy: error in update operation")
         finally:
             if all_valid:
+                calc_cost()
                 con.close()
             flag_sel = {'pc': flag_color, 'sc': flag_color_secondary, 'pattern': flag_pattern}
             return render_template("updated.html", msg=msg, flag_selection=flag_sel)
