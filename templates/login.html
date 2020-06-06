@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<div class="login">
+    <h1>Welcome</h1>
+    <form action="/login" method="post">
+        <input type="text" name="u" placeholder="Username" required="required" />
+        <input type="password" name="p" placeholder="Password" required="required" />
+        <button type="submit" class="btn btn-primary btn-block btn-large">Log in</button>
+    </form>
+</div>
+
+
+
+{% endblock %}
+
