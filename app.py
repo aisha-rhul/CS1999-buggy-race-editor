@@ -413,26 +413,23 @@ def summary():
 
 
 # ------------------------------------------------------------
-# delete the buggy
-#   don't want DELETE here, because we're anticipating
-#   there always being a record to update (because the
-#   student needs to change that!)
+# delete the buggy - deletes a selected record
 # ------------------------------------------------------------
-@app.route('/delete', methods=['POST'])
-def delete_buggy():
+def delete_buggy(buggy_id):
     try:
         msg = "deleting buggy"
         with sql.connect(DATABASE_FILE) as con:
             cur = con.cursor()
-            cur.execute("DELETE FROM Buggy")
+            cur.execute("DELETE FROM Buggy WHERE id = ?", (buggy_id,))
             con.commit()
             msg = "Buggy deleted"
     except:
         con.rollback()
         msg = "error in delete operation"
+        return msg
     finally:
         con.close()
-        return render_template("updated.html", msg=msg)
+        return msg
 
 
 if __name__ == '__main__':
