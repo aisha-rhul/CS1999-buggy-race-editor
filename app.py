@@ -181,10 +181,19 @@ def calc_cost():
 
 
 # ------------------------------------------------------------
-# the index page
+# the login page
 # ------------------------------------------------------------
 @app.route('/')
 def home():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template('login.html', server_url=BUGGY_RACE_SERVER_URL)
+
+
+# ------------------------------------------------------------
+# the index page
+# ------------------------------------------------------------
+@app.route('/index')
+def index():
     mimetypes.add_type("text/css", ".css", True)
     return render_template('index.html', server_url=BUGGY_RACE_SERVER_URL)
 
