@@ -12,7 +12,7 @@ BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
 
 # ------------------------------------------------------------
-# validate integer: num=number, lower=lower bound check
+# validate integer - num:number, lower:lower bound check
 # ------------------------------------------------------------
 def validate_integer(num, lower):
     try:
@@ -46,7 +46,7 @@ def get_buggy_record(buggy_id):
 
 
 # ------------------------------------------------------------
-# get last buggy_id
+# get the buggy_id of the last buggy
 # ------------------------------------------------------------
 def get_last_buggy_id():
     try:
@@ -70,7 +70,6 @@ def get_last_buggy_id():
 def valid_power_type(power_type, power_units):
     try:
         with sql.connect(DATABASE_FILE) as con:
-
             cur = con.cursor()
 
             power_type = str(power_type)
@@ -347,6 +346,20 @@ def create_buggy():
 
 
 # ------------------------------------------------------------
+# edit record selected by user
+# ------------------------------------------------------------
+@app.route('/edit-record', methods=['POST', 'GET'])
+def edit_record():
+    if request.method == 'POST':
+        try:
+            print("post received in edit record")
+        except:
+            print("exception in edit_record")
+        finally:
+            print("leaving edit_record")
+
+
+# ------------------------------------------------------------
 # receive selected buggy from user
 # ------------------------------------------------------------
 @app.route('/list', methods=['POST', 'GET'])
@@ -413,17 +426,17 @@ def get_records():
 @app.route('/buggy')
 def show_buggies():
     mimetypes.add_type("text/css", ".css", True)
-    record = get_records()
+    record = get_buggy_record(1)
     return render_template("buggy.html", buggy=record)
 
 
 # ------------------------------------------------------------
 # a page for displaying the buggy
+# SAME ROUTE AS create_buggy IS THIS NECESSARY???
 # ------------------------------------------------------------
 @app.route('/new')
-def edit_buggy():
+def make_buggy():
     mimetypes.add_type("text/css", ".css", True)
-
     return render_template("buggy-form.html", title="Make buggy")
 
 
