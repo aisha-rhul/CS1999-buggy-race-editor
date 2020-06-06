@@ -199,6 +199,7 @@ def home():
 def create_buggy():
     mimetypes.add_type("text/css", ".css", True)
     msg = []
+    buggy_id = DEFAULT_BUGGY_ID
     valid_wheels = True
     valid_power = True
     valid_aux_power = True
@@ -207,10 +208,11 @@ def create_buggy():
     valid_attacks = True
     all_valid = False
 
-    msg.append("Invalid data input, record not written to database")
+    msg.append("Record not written to database")
 
     if request.method == 'GET':
-        return render_template("buggy-form.html")
+        buggy_id = get_last_buggy_id() + 1
+        return render_template("buggy-form.html", buggy=buggy_id, title="Make buggy")
     elif request.method == 'POST':
         try:
             qty_wheels = request.form['qty_wheels'].strip()
@@ -284,34 +286,60 @@ def create_buggy():
             if valid_attacks and valid_aux_power and valid_hamster and valid_power and valid_tyres and valid_wheels and \
                     valid_power_type(power_type, power_units) and valid_power_type(aux_power_type, aux_power_units):
                 all_valid = True
-                with sql.connect(DATABASE_FILE) as con:
-                    cur = con.cursor()
-                    cur.execute("UPDATE Buggy set qty_wheels=? WHERE id=?", (int(qty_wheels), DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set power_type=? WHERE id=?", (power_type, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set power_units=? WHERE id=?", (int(power_units), DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set aux_power_type=? WHERE id=?", (aux_power_type, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set aux_power_units=? WHERE id=?", (int(aux_power_units), DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set hamster_booster=? WHERE id=?", (int(hamster_booster), DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set flag_color=? WHERE id=?", (flag_color, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set flag_pattern=? WHERE id=?", (flag_pattern, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set flag_color_secondary=? WHERE id=?", (flag_color_secondary, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set tyres=? WHERE id=?", (tyres, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set qty_tyres=? WHERE id=?", (int(qty_tyres), DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set armour=? WHERE id=?", (armour, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set attack=? WHERE id=?", (attack, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set qty_attacks=? WHERE id=?", (int(qty_attacks), DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set fireproof=? WHERE id=?", (fireproof, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set insulated=? WHERE id=?", (insulated, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set antibiotic=? WHERE id=?", (antibiotic, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, DEFAULT_BUGGY_ID))
-                    cur.execute("UPDATE Buggy set algo=? WHERE id=?", (algo, DEFAULT_BUGGY_ID))
-                    con.commit()
-                    calc_cost();
-                    msg.clear()
-                    msg.append("Record successfully saved")
+
+                action = request.form['action'].strip()
+                print(action)
+
+                # add/update record
+                if action == "create":
+                    print("in add record - about to add ...")
+
+                    # insert record
+                    with sql.connect(DATABASE_FILE) as con:
+                        cur = con.cursor()
+                        cur.execute(''' INSERT INTO Buggy (qty_wheels, power_type, power_units, aux_power_type, 
+                            aux_power_units, hamster_booster, flag_color, flag_pattern, flag_color_secondary, tyres,
+                            qty_tyres, armour, attack, qty_attacks, fireproof, insulated, antibiotic, banging, algo) 
+                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ''',
+                                    (int(qty_wheels), power_type, int(power_units), aux_power_type,
+                                     int(aux_power_units), int(hamster_booster), flag_color, flag_pattern,
+                                     flag_color_secondary, tyres, int(qty_tyres), armour, attack, int(qty_attacks),
+                                     fireproof, insulated, antibiotic, banging, algo))
+                        con.commit()
+                        msg.clear()
+                        msg.append("New record added to database")
+                else:   # update table
+                    print("in edit - about to update ...")
+                    buggy_id = request.form['bid'].strip()     # get the selected buggy_id
+                    # buggy_id = 2
+                    with sql.connect(DATABASE_FILE) as con:
+                        cur = con.cursor()
+                        cur.execute("UPDATE Buggy set qty_wheels=? WHERE id=?", (int(qty_wheels), buggy_id))
+                        cur.execute("UPDATE Buggy set power_type=? WHERE id=?", (power_type, buggy_id))
+                        cur.execute("UPDATE Buggy set power_units=? WHERE id=?", (int(power_units), buggy_id))
+                        cur.execute("UPDATE Buggy set aux_power_type=? WHERE id=?", (aux_power_type, buggy_id))
+                        cur.execute("UPDATE Buggy set aux_power_units=? WHERE id=?", (int(aux_power_units), buggy_id))
+                        cur.execute("UPDATE Buggy set hamster_booster=? WHERE id=?", (int(hamster_booster), buggy_id))
+                        cur.execute("UPDATE Buggy set flag_color=? WHERE id=?", (flag_color, buggy_id))
+                        cur.execute("UPDATE Buggy set flag_pattern=? WHERE id=?", (flag_pattern, buggy_id))
+                        cur.execute("UPDATE Buggy set flag_color_secondary=? WHERE id=?", (flag_color_secondary, buggy_id))
+                        cur.execute("UPDATE Buggy set tyres=? WHERE id=?", (tyres, buggy_id))
+                        cur.execute("UPDATE Buggy set qty_tyres=? WHERE id=?", (int(qty_tyres), buggy_id))
+                        cur.execute("UPDATE Buggy set armour=? WHERE id=?", (armour, buggy_id))
+                        cur.execute("UPDATE Buggy set attack=? WHERE id=?", (attack, buggy_id))
+                        cur.execute("UPDATE Buggy set qty_attacks=? WHERE id=?", (int(qty_attacks), buggy_id))
+                        cur.execute("UPDATE Buggy set fireproof=? WHERE id=?", (fireproof, buggy_id))
+                        cur.execute("UPDATE Buggy set insulated=? WHERE id=?", (insulated, buggy_id))
+                        cur.execute("UPDATE Buggy set antibiotic=? WHERE id=?", (antibiotic, buggy_id))
+                        cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, buggy_id))
+                        cur.execute("UPDATE Buggy set algo=? WHERE id=?", (algo, buggy_id))
+                        con.commit()
+                        calc_cost()
+                        msg.clear()
+                        msg.append("Record successfully saved")
         except:
             con.rollback()
-            msg.append("create_buggy: error in update operation")
+            msg.append("update_buggy: error in update operation")
         finally:
             if all_valid:
                 con.close()
@@ -340,12 +368,18 @@ def list_buggies():
                     'sel_banging': (request.form['sel_banging']).strip(),
                     'sel_algo': (request.form['sel_algo']).strip(),
                     }
+
+            action = request.form['action'].strip()
+            if action == "delete":
+                delete_buggy(buggy_id)
+
             print(selection)
         except:
             print("list_buggies: error in update operation")
         finally:
             record = get_buggy_record(str(buggy_id))
-            return render_template("edit-record.html", title="Edit buggy", bid=buggy_id, sel=selection, buggy=record)
+            if action == "edit":
+                return render_template("edit-record.html", title="Edit buggy", bid=buggy_id, sel=selection, buggy=record)
     else:
         all_records = get_records()
     all_records = get_records()
