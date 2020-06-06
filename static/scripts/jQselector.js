@@ -17,5 +17,5 @@ window.onload = function () {
       document.getElementById("sel_banging").value = $(this).find('td:eq(18)').html();
       document.getElementById("sel_algo").value = $(this).find('td:eq(19)').html();
    });
-
+   drawFlag(pennant.pc,pennant.sc,pennant.pattern);
 };

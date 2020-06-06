@@ -207,7 +207,7 @@ def create_buggy():
     valid_attacks = True
     all_valid = False
 
-    msg.append("Record not written to database")
+    msg.append("Invalid data input, record not written to database")
 
     if request.method == 'GET':
         buggy_id = get_last_buggy_id() + 1
@@ -350,7 +350,8 @@ def create_buggy():
         finally:
             if all_valid:
                 con.close()
-            return render_template("updated.html", msg=msg)
+            flag_sel = {'pc': flag_color, 'sc': flag_color_secondary, 'pattern': flag_pattern}
+            return render_template("updated.html", msg=msg, flag_selection=flag_sel)
 
 
 # ------------------------------------------------------------

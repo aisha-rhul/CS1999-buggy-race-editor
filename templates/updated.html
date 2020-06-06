@@ -2,6 +2,11 @@
 
 {% block content %}
 
+    <script>
+        let pennant = JSON.parse('{{ flag_selection| tojson | safe}}');
+
+    </script>
+
   <h1>Updated Buggy</h1>
 
   <p>
@@ -10,6 +15,131 @@
       {% endfor %}
 
   </p>
+
+  <br>
+    <canvas id="myCanvas" width="500" height="300"></canvas>
+    <script>
+        const myCanvas = document.getElementById("myCanvas");
+        let drawingContext = myCanvas.getContext("2d");
+
+        let w = myCanvas.width;
+        let h = myCanvas.height;
+
+        function drawFlag(pc, sc, pattern) {
+            if (pattern.localeCompare("dstripe") == 0) {
+                dStripe(pc, sc);
+            } else if (pattern.localeCompare("vstripe") == 0) {
+                vStripe(pc, sc);
+            } else if (pattern.localeCompare("hstripe") == 0) {
+                hStripe(pc, sc);
+            } else if (pattern.localeCompare("checker") == 0) {
+                checkered(pc, sc);
+            } else if (pattern.localeCompare("spot") == 0) {
+                spotPattern(pc, sc);
+            } else if (pattern.localeCompare("plain") == 0) {
+                plainPattern(pc, sc);
+            }
+        }
+
+        function dStripe(primaryColour, secondaryColour){
+            let numberOfStripes =10;
+            for (let i=0;i<numberOfStripes*2;i++){
+                let thickness = myCanvas.width / numberOfStripes;
+                drawingContext.beginPath();
+                drawingContext.strokeStyle = i % 2?primaryColour:secondaryColour;
+                drawingContext.lineWidth =thickness;
+                drawingContext.lineCap = 'square';
+
+                drawingContext.moveTo(i*thickness + thickness/2 - myCanvas.width,0);
+                drawingContext.lineTo(0 + i*thickness+thickness/2,myCanvas.width);
+                drawingContext.stroke();
+            }
+        }
+
+        function vStripe(primaryColour, secondaryColour) {
+            let numberOfStripes = 10;
+
+            for (let i=0;i<numberOfStripes;i++) {
+                let thickness = myCanvas.width / numberOfStripes;
+                drawingContext.beginPath();
+                drawingContext.strokeStyle = i % 2?primaryColour:secondaryColour;
+                drawingContext.lineWidth =thickness;
+
+                drawingContext.moveTo(i*thickness + thickness/2,0);
+                drawingContext.lineTo(i*thickness+thickness/2,myCanvas.width);
+                drawingContext.stroke();
+                console.log(i);
+            }
+        }
+
+        function hStripe(primaryColour, secondaryColour) {
+            let numberOfStripes = 10;
+            for (let i=0; i<numberOfStripes; i++){
+                let thickness = myCanvas.width / numberOfStripes;
+                drawingContext.beginPath();
+                drawingContext.strokeStyle = i % 2?primaryColour:secondaryColour;
+                drawingContext.lineWidth =thickness;
+
+                drawingContext.moveTo(0,i*thickness + thickness/2);
+                drawingContext.lineTo(myCanvas.width,i*thickness+thickness/2);
+                drawingContext.stroke();
+            }
+        }
+
+        function checkered(primaryColour, secondaryColour) {
+            let myCanvas = document.getElementById("myCanvas");
+            let drawingContext = myCanvas.getContext("2d");
+
+            let w = myCanvas.width;
+            let h = myCanvas.height;
+
+            let nRow = 8;
+            let nCol = 8;
+
+            w /= nCol;
+            h /= nRow;
+
+            drawingContext.fillStyle = secondaryColour;
+            drawingContext.fillRect(0, 0, myCanvas.width, myCanvas.height);
+
+            drawingContext.fillStyle = primaryColour;
+            drawingContext.fill();
+
+            for (let i = 0; i < nRow; ++i) {
+                for (let j = 0, col = nCol / 2; j < col; ++j) {
+                    drawingContext.rect(2 * j * w + (i % 2 ? 0 : w), i * h, w, h);
+                }
+            }
+
+            drawingContext.fill();
+        }
+
+        function spotPattern(primaryColour, secondaryColour) {
+            drawingContext.fillStyle = secondaryColour;
+            drawingContext.fillRect(0, 0, myCanvas.width, myCanvas.height);
+
+            drawingContext.beginPath();
+            drawingContext.arc(w/2, h/2, 50, 0, 2 * Math.PI, true);
+            drawingContext.fillStyle = primaryColour;
+            drawingContext.fill();
+        }
+
+        function plainPattern(primaryColour, secondaryColour) {
+            for (let i=0; i<2; i++){
+                let thickness = myCanvas.width / 2;
+                drawingContext.beginPath();
+                drawingContext.strokeStyle = i % 2?primaryColour:secondaryColour;
+                drawingContext.lineWidth =thickness;
+
+                drawingContext.moveTo(0,i*thickness+25);
+                drawingContext.lineTo(myCanvas.width,i*thickness+25);
+                drawingContext.stroke();
+            }
+        }
+    </script>
+  <br>
+
+
   <p>
     <a href="/" class="button">home</a>
   </p>
