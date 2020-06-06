@@ -10,6 +10,8 @@ DEFAULT_BUGGY_ID = "1"
 
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
+username = ""
+password = ""
 
 # ------------------------------------------------------------
 # validate integer - num:number, lower:lower bound check
@@ -196,6 +198,46 @@ def home():
 def index():
     mimetypes.add_type("text/css", ".css", True)
     return render_template('index.html', server_url=BUGGY_RACE_SERVER_URL)
+
+
+# ------------------------------------------------------------
+# login processing username, password are stored globally
+# ------------------------------------------------------------
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    global username
+    global password
+
+    username = str(request.form['u'])   # Gets username from user
+    password = str(request.form['p'])   # Gets password from user
+
+    try:
+        con = sql.connect(DATABASE_FILE)
+        con.row_factory = sql.Row
+        cur = con.cursor()
+
+        # Get privilege level of user from database table User
+        cur.execute("SELECT privilege_level FROM User WHERE username=?", (username,))
+        for row in cur.fetchall():
+            privilege_level = row[0]
+
+        # Get password from database table User
+        cur.execute("SELECT password FROM User WHERE username=?", (username,))
+
+        # Check privilege level of user and gives appropriate response for each case
+        if privilege_level == "admin" or privilege_level == "user":
+            for row in cur.fetchall():
+                if password == row[0]:
+                    return render_template('index.html')    # successful login
+
+        # reload login page for incorrect password
+        return render_template('login.html')
+    except:
+        # report exception
+        print("Exception - in login")
+        return render_template('login.html')
+    finally:
+        con.close()
 
 
 # ------------------------------------------------------------
