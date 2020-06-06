@@ -183,6 +183,36 @@ def calc_cost():
 
 
 # ------------------------------------------------------------
+# return buggy records owned by a user
+# ------------------------------------------------------------
+def get_user_buggies():
+    try:
+        con = sql.connect(DATABASE_FILE)
+        con.row_factory = sql.Row
+        cur = con.cursor()
+
+        # Get privilege level of user from database table User
+        cur.execute("SELECT privilege_level FROM User WHERE username=?", (username,))
+        for row in cur.fetchall():
+            privilege_level = row[0]
+
+        if privilege_level == "admin":
+            return get_records()        # fetch all buggy records
+        else:
+            # Get all the buggy id's owned by a user
+            # select Buggy.* from Buggy left join Ownership on  Buggy.id=Ownership.buggy_id where username="username"
+            cur.execute("SELECT Buggy.* FROM Buggy LEFT JOIN Ownership ON Buggy.id=Ownership.buggy_id \
+                        WHERE Ownership.username=?", (username,))
+            records = cur.fetchall()
+            return records
+
+    except:
+        print("Exception: in database operation")
+    finally:
+        con.close()
+
+
+# ------------------------------------------------------------
 # the login page
 # ------------------------------------------------------------
 @app.route('/')
@@ -455,7 +485,7 @@ def list_buggies():
                 return render_template("edit-record.html", title="Edit buggy", bid=buggy_id, sel=selection, buggy=record)
     else:
         all_records = get_records()
-    all_records = get_records()
+    all_records = get_user_buggies()
     return render_template("list.html", buggies=all_records)
 
 
