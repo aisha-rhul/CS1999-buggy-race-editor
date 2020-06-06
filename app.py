@@ -236,6 +236,10 @@ def create_buggy():
             if not valid_aux_power:
                 msg.append("Aux Power - Value must be an integer greater than or equal to 0")
 
+            if aux_power_type != "None" and int(aux_power_units) == 0:
+                msg.append("Aux Power Units - Cannot be zero when aux power type is chosen")
+                valid_aux_power = False
+
             if not valid_power_type(aux_power_type, aux_power_units):
                 msg.append("Power type/unit - Consumable auxiliary power type can only have one auxiliary power unit")
 
@@ -245,11 +249,11 @@ def create_buggy():
                 msg.append("Hamster Booster - Value must be an integer greater than or equal to 0")
 
             if (power_type != "hamster" and aux_power_type != "hamster") and int(hamster_booster) > 0:
-                msg.append("Hamster Booster - can only be set if power type is hamster")
+                msg.append("Hamster Booster - Can only be set if power type is hamster")
                 valid_hamster = False
 
             if aux_power_type == "none" and int(aux_power_units) > 0:
-                msg.append("Auxiliary power - cannot be greater than 0 if no auxiliary power is chosen")
+                msg.append("Auxiliary power - Cannot be greater than 0 if no auxiliary power is chosen")
                 valid_aux_power = False
 
             flag_color = request.form['flag_color']
@@ -272,7 +276,11 @@ def create_buggy():
                 msg.append("Attacks - Value must be an integer greater than or equal to 0")
 
             if attack == "none" and int(qty_attacks) > 0:
-                msg.append("Attack quantity - cannot be greater than zero when no attack is chosen")
+                msg.append("Attack quantity - Cannot be greater than zero when no attack is chosen")
+                valid_attacks = False
+
+            if attack != "none" and int(qty_attacks) == 0:
+                msg.append("Attack quantity - Cannot be zero when attack is chosen")
                 valid_attacks = False
 
             fireproof = str('fireproof' in request.form).lower()
