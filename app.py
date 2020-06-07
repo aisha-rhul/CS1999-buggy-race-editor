@@ -126,7 +126,7 @@ def calc_cost():
 
             # Get record of last buggy
             record = []
-            cur.execute("SELECT * FROM Buggy WHERE id=?", buggy_id)
+            cur.execute("SELECT * FROM Buggy WHERE id=?", (buggy_id,))
             for row in cur.fetchall():
                 record = row
 
@@ -416,6 +416,7 @@ def create_buggy():
                         cur.execute(''' INSERT INTO Ownership (buggy_id, username) VALUES (?, ?)''',
                                     (buggy_id, username))
                         con.commit()
+                        calc_cost()
                         msg.clear()
                         msg.append("New record added to database")
                 else:   # update table
@@ -495,7 +496,7 @@ def list_buggies():
                     'sel_antibiotic': (request.form['sel_antibiotic']).strip(),
                     'sel_banging': (request.form['sel_banging']).strip(),
                     'sel_algo': (request.form['sel_algo']).strip(),
-                    #'sel_cost': (request.form['sel_cost']).strip(),
+                    'sel_cost': get_buggy_cost(buggy_id),
                     }
 
             action = request.form['action'].strip()
