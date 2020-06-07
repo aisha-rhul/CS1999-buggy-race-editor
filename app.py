@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import sqlite3 as sql
 import os
 import mimetypes
+from passlib.hash import bcrypt
 
 app = Flask(__name__)
 
@@ -260,6 +261,8 @@ def login():
     username = str(request.form['u'])   # Gets username from user
     password = str(request.form['p'])   # Gets password from user
 
+    pwd_hash = bcrypt.hash(password)    # Generate password hash using bcrypt
+
     try:
         con = sql.connect(DATABASE_FILE)
         con.row_factory = sql.Row
@@ -276,7 +279,7 @@ def login():
         # Check privilege level of user and gives appropriate response for each case
         if privilege_level == "admin" or privilege_level == "user":
             for row in cur.fetchall():
-                if password == row[0]:
+                if bcrypt.verify(password, row[0]):
                     return render_template('index.html')    # successful login
 
         # reload login page for incorrect password
