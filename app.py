@@ -1,10 +1,5 @@
-import json
-import webbrowser
-from plistlib import loads
-
 from flask import Flask, render_template, request, jsonify, redirect
 import sqlite3 as sql
-import os
 import mimetypes
 from passlib.hash import bcrypt
 
@@ -596,7 +591,7 @@ def get_records():
 @app.route('/buggy')
 def show_buggies():
     mimetypes.add_type("text/css", ".css", True)
-    record = get_buggy_record(1)
+    record = get_buggy_record(DEFAULT_BUGGY_ID)
     return render_template("buggy.html", buggy=record)
 
 
