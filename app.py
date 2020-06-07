@@ -1,3 +1,4 @@
+import json
 import webbrowser
 from plistlib import loads
 
@@ -622,7 +623,9 @@ def summary():
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
     cur = con.cursor()
-    cur.execute("SELECT * FROM Buggy WHERE id=?", (selected_buggy,))
+    cur.execute("SELECT id, power_type, power_units, aux_power_type, aux_power_units, hamster_booster, flag_color, "
+                "flag_pattern, flag_color_secondary, tyres, qty_tyres, armour, attack, qty_attacks, fireproof, "
+                "insulated, antibiotic, banging, algo FROM Buggy WHERE id=?", (selected_buggy,))
     return jsonify(
         {k: v for k, v in dict(zip(
             [column[0] for column in cur.description], cur.fetchone())).items()
