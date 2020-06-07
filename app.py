@@ -318,6 +318,7 @@ def create_buggy():
             valid_wheels = validate_integer(qty_wheels, 4)
             if not valid_wheels or int(qty_wheels) % 2 != 0:
                 msg.append("Wheels - The number of wheels must be an even integer greater or equal to 4")
+                valid_wheels = False
 
             power_type = (request.form['power_type']).lower()
 
@@ -575,6 +576,15 @@ def summary():
          if (v != "" and v is not None)
          }
     )
+
+
+# ------------------------------------------------------------
+# loads login page after logging out
+# ------------------------------------------------------------
+@app.route('/logout')
+def logout():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("login.html")
 
 
 # ------------------------------------------------------------

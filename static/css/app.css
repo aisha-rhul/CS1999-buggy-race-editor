@@ -5,24 +5,24 @@ html{
 
 body {
   font-family: "Source Sans Pro","Helvetica Neue",Arial,Helvetica,sans-serif;
-  margin: 0;
+  margin: 10px 10px;
   padding: 0;
   font-size: 1.2em;
   color: #000000;
-  background: repeating-linear-gradient(
-    45deg,
-    #ffffee,
-    #ffffee 2em,
-    #eeeeee 2em,
-    #eeeeee 4em
-  );
+  /*background-image: url('https://www.freepnglogos.com/uploads/road-png/road-moving-straight-background-tilesprite-phaser-html-9.png');*/
+  background-color: lightblue;
+  background-repeat: no-repeat;
+  background-size: 80%;
+  text-align: left;
 }
 
 .main-content {
   min-height:100vh;
   padding: 1em;
-  background: white;
-  margin: 0 0 0 3em;
+  width: 1300px;
+  height: auto;
+  margin: 10px 10px;
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
 h1 {
@@ -60,7 +60,7 @@ input.button {
 table {
   border:1px solid black;
   border-collapse: collapse;
-  margin: 0 0 2em 0;
+  margin: 0 auto;
 }
 
 table td, table th {
@@ -96,4 +96,38 @@ br {
 .other input.button {
   margin-left: 330px;
   cursor: grab;
+}
+
+@keyframes bgcolor {
+  0% {
+    background-color: #cce6ff
+  }
+
+  20% {
+    background-color: #80bfff
+  }
+
+  40% {
+    background-color: #4da6ff
+  }
+
+  60% {
+    background-color: #1a8cff
+  }
+
+  80% {
+    background-color: #0073e6
+  }
+
+  100% {
+    background-color: #0059b3
+  }
+}
+
+body {
+
+  -webkit-animation: bgcolor 20s infinite;
+  animation: bgcolor 10s infinite;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
 }
