@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, jsonify
+import webbrowser
+
+from flask import Flask, render_template, request, jsonify, redirect
 import sqlite3 as sql
 import os
 import mimetypes
@@ -13,7 +15,7 @@ BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
 username = "guest"
 password = ""
-
+selected_buggy = 0
 
 # ------------------------------------------------------------
 # validate integer - num:number, lower:lower bound check
@@ -400,11 +402,9 @@ def create_buggy():
                 all_valid = True
 
                 action = request.form['action'].strip()
-                print(action)
 
-                # add/update record
+                    # add/update record
                 if action == "create":
-                    print("in add record - about to add ...")
                     buggy_id = get_last_buggy_id() + 1
                     # insert record
                     with sql.connect(DATABASE_FILE) as con:
@@ -424,7 +424,6 @@ def create_buggy():
                         msg.clear()
                         msg.append("New record added to database")
                 else:   # update table
-                    print("in edit - about to update ...")
                     buggy_id = request.form['bid'].strip()     # get the selected buggy_id
                     # buggy_id = 2
                     with sql.connect(DATABASE_FILE) as con:
@@ -484,10 +483,12 @@ def edit_record():
 # ------------------------------------------------------------
 @app.route('/list', methods=['POST', 'GET'])
 def list_buggies():
+    global selected_buggy
     if request.method == 'POST':
         try:
             selection = []
             buggy_id = request.form['selected_id']
+
             selection = {
                     'sel_primary_power': (request.form['sel_primary_power']).strip(),
                     'sel_aux_power': (request.form['sel_aux_power']).strip(),
@@ -506,6 +507,9 @@ def list_buggies():
             action = request.form['action'].strip()
             if action == "delete":
                 delete_buggy(buggy_id)
+            if action == "json":
+                selected_buggy = int(buggy_id)
+                return redirect("./json", code=302)
 
             print(selection)
         except:
@@ -569,10 +573,12 @@ def make_buggy():
 # ------------------------------------------------------------
 @app.route('/json')
 def summary():
+    global selected_buggy
+
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
     cur = con.cursor()
-    cur.execute("SELECT * FROM Buggy WHERE id=? LIMIT 1", (DEFAULT_BUGGY_ID))
+    cur.execute("SELECT * FROM Buggy WHERE id=?", (selected_buggy,))
     return jsonify(
         {k: v for k, v in dict(zip(
             [column[0] for column in cur.description], cur.fetchone())).items()
