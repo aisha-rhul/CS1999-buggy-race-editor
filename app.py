@@ -347,6 +347,7 @@ def create_buggy():
                 if validate_integer(int(qty_tyres), 4) and (int(qty_tyres) >= int(qty_wheels)):
                     valid_tyres = True
                 else:
+                    valid_tyres = False
                     msg.append("Tyres - Number of Tyres must be an integer greater than or equal to number of wheels")
 
             armour = request.form['armour'].lower()
@@ -434,6 +435,9 @@ def create_buggy():
                 calc_cost()
                 con.close()
                 flag_sel = {'pc': flag_color, 'sc': flag_color_secondary, 'pattern': flag_pattern}
+            else:
+                flag_sel = {'pc': "#ffffff", 'sc': "#ffffff", 'pattern': flag_pattern}
+
             return render_template("updated.html", msg=msg, flag_selection=flag_sel)
 
 
