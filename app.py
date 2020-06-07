@@ -10,7 +10,7 @@ DEFAULT_BUGGY_ID = "1"
 
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
-username = ""
+username = "guest"
 password = ""
 
 # ------------------------------------------------------------
@@ -344,7 +344,7 @@ def create_buggy():
 
             qty_tyres = request.form['qty_tyres'].strip()
             if validate_integer(qty_wheels, 4):
-                if validate_integer(qty_tyres, 4) and (int(qty_tyres) >= int(qty_wheels)):
+                if validate_integer(int(qty_tyres), 4) and (int(qty_tyres) >= int(qty_wheels)):
                     valid_tyres = True
                 else:
                     msg.append("Tyres - Number of Tyres must be an integer greater than or equal to number of wheels")
@@ -433,7 +433,7 @@ def create_buggy():
             if all_valid:
                 calc_cost()
                 con.close()
-            flag_sel = {'pc': flag_color, 'sc': flag_color_secondary, 'pattern': flag_pattern}
+                flag_sel = {'pc': flag_color, 'sc': flag_color_secondary, 'pattern': flag_pattern}
             return render_template("updated.html", msg=msg, flag_selection=flag_sel)
 
 
@@ -561,6 +561,7 @@ def delete_buggy(buggy_id):
         with sql.connect(DATABASE_FILE) as con:
             cur = con.cursor()
             cur.execute("DELETE FROM Buggy WHERE id = ?", (buggy_id,))
+            cur.execute("DELETE FROM Ownership WHERE buggy_id = ?", (buggy_id,))
             con.commit()
             msg = "Buggy deleted"
     except:
