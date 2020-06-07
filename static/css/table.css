@@ -11,3 +11,9 @@ td {
 .notfirst:hover {
     background-color: #ff00ff;
 }
+
+.firstrow tr:first-child td {
+    vertical-align: top;
+    color: #ffffff;
+    background-color: #00008B;
+}
