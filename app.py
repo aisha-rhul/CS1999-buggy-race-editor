@@ -13,6 +13,7 @@ BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 username = "guest"
 password = ""
 
+
 # ------------------------------------------------------------
 # validate integer - num:number, lower:lower bound check
 # ------------------------------------------------------------
@@ -25,6 +26,24 @@ def validate_integer(num, lower):
             return False
     except ValueError:
         return False
+
+
+# ------------------------------------------------------------
+# get cost of buggy based on the buggy ID
+# ------------------------------------------------------------
+def get_buggy_cost(buggy_id):
+    try:
+        with sql.connect(DATABASE_FILE) as con:
+            cur = con.cursor()
+
+            cur.execute("SELECT total_cost FROM Buggy WHERE id=?", (buggy_id,))
+            for row in cur.fetchall():
+                cost = int(row[0])
+        return cost
+    except:
+        print("Could not locate the record in the database")
+    finally:
+        con.close()
 
 
 # ------------------------------------------------------------
@@ -476,6 +495,7 @@ def list_buggies():
                     'sel_antibiotic': (request.form['sel_antibiotic']).strip(),
                     'sel_banging': (request.form['sel_banging']).strip(),
                     'sel_algo': (request.form['sel_algo']).strip(),
+                    #'sel_cost': (request.form['sel_cost']).strip(),
                     }
 
             action = request.form['action'].strip()
