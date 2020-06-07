@@ -1,4 +1,5 @@
 import webbrowser
+from plistlib import loads
 
 from flask import Flask, render_template, request, jsonify, redirect
 import sqlite3 as sql
@@ -15,7 +16,7 @@ BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
 username = "guest"
 password = ""
-selected_buggy = 0
+selected_buggy = 1
 
 # ------------------------------------------------------------
 # validate integer - num:number, lower:lower bound check
@@ -251,6 +252,14 @@ def index():
     mimetypes.add_type("text/css", ".css", True)
     return render_template('index.html', server_url=BUGGY_RACE_SERVER_URL)
 
+# ------------------------------------------------------------
+# the register page
+# ------------------------------------------------------------
+@app.route('/register')
+def register_page():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template('register.html', server_url=BUGGY_RACE_SERVER_URL)
+
 
 # ------------------------------------------------------------
 # login processing username, password are stored globally
@@ -290,6 +299,41 @@ def login():
         # report exception
         print("Exception - in login")
         return render_template('login.html')
+    finally:
+        con.close()
+
+
+# ---------------------------------------------------------------------
+# registers a user and adds their credentials to database table User
+# ---------------------------------------------------------------------
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    new_username = str(request.form['u'])   # Gets username from user
+    new_password = str(request.form['p'])   # Gets password from user
+    new_email = str(request.form['e'])      # Gets email from user
+
+    pwd_hash = bcrypt.hash(new_password)    # Generate password hash using bcrypt
+
+    try:
+        con = sql.connect(DATABASE_FILE)
+        con.row_factory = sql.Row
+        cur = con.cursor()
+
+        # Insert user credentials to database table User
+        cur.execute(''' INSERT INTO User (username, password, privilege_level, email) VALUES (?, ?, ?, ?)''',
+                    (new_username, pwd_hash, "user", new_email))
+
+        # Get password from database table User
+        cur.execute("SELECT password FROM User WHERE username=?", (username,))
+        con.commit()
+
+        # loads login page after successfully registering a user
+        return render_template('login.html')
+    except:
+        # report exception
+        print("Exception - in register")
+        con.rollback()
+        return render_template('register.html')
     finally:
         con.close()
 

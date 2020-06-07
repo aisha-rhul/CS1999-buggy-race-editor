@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<div class="register">
+    <h1>Register</h1>
+    <form action="/register" method="post">
+        <p>Create a username</p>
+        <input type="text" name="u" placeholder="Enter username" required="required"/>
+        <p>Create a password</p>
+        <input type="password" name="p" placeholder="Enter Password" required="required"/>
+        <p>Enter your email</p>
+        <input type="email" name="e" placeholder="Enter email" required="required"/>
+        <button type="submit" class="btn btn-primary btn-block btn-large">Register</button>
+    </form>
+</div>
+
+
+
+{% endblock %}
+
