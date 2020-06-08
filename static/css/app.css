@@ -57,6 +57,7 @@ input {
 input.button {
   background-color: #99ff99;
 }
+
 table {
   border:1px solid black;
   border-collapse: collapse;
@@ -146,5 +147,14 @@ body {
 .buggy-record td {
   font-family: Arial;
   font-size: 14pt;
+}
+
+.largespacer {
+  margin: 0em 10px;
+}
+
+.loginbutton {
+  height: 32px;
+  width: 80px;
 }
 

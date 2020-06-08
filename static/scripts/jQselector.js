@@ -19,5 +19,5 @@ window.onload = function () {
       document.getElementById("sel_cost").value = $(this).find('td:eq(20)').html();
 
    });
-   drawFlag(pennant.pc,pennant.sc,pennant.pattern);
+
 };

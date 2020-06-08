@@ -178,25 +178,25 @@ def calc_cost():
             # Cost for fireproof
             cur.execute("SELECT cost FROM Extras WHERE perk='fireproof'")
             for row in cur.fetchall():
-                if record[15] == "true":
+                if record[15] == 1:
                     total_cost += row[0]
 
             # Cost for insulated
             cur.execute("SELECT cost FROM Extras WHERE perk='insulated'")
             for row in cur.fetchall():
-                if record[16] == "true":
+                if record[16] == 1:
                     total_cost += row[0]
 
             # Cost for antibiotic
             cur.execute("SELECT cost FROM Extras WHERE perk='antibiotic'")
             for row in cur.fetchall():
-                if record[17] == "true":
+                if record[17] == 1:
                     total_cost += row[0]
 
             # Cost for banging
             cur.execute("SELECT cost FROM Extras WHERE perk='banging'")
             for row in cur.fetchall():
-                if record[18] == "true":
+                if record[18] == 1:
                     total_cost += row[0]
 
             # Update cost in buggy table after calculation
@@ -507,10 +507,10 @@ def create_buggy():
                 msg.append("Attack quantity - Cannot be zero when attack is chosen")
                 valid_attacks = False
 
-            fireproof = str('fireproof' in request.form).lower()
-            insulated = str('insulated' in request.form).lower()
-            antibiotic = str('antibiotic' in request.form).lower()
-            banging = str('banging' in request.form).lower()
+            fireproof = 'fireproof' in request.form
+            insulated = 'insulated' in request.form
+            antibiotic = 'antibiotic' in request.form
+            banging = 'banging' in request.form
 
             algo = request.form['algo'].lower()
 
@@ -695,9 +695,9 @@ def summary():
     con = sql.connect(DATABASE_FILE)
     con.row_factory = sql.Row
     cur = con.cursor()
-    cur.execute("SELECT id, power_type, power_units, aux_power_type, aux_power_units, hamster_booster, flag_color, "
-                "flag_pattern, flag_color_secondary, tyres, qty_tyres, armour, attack, qty_attacks, fireproof, "
-                "insulated, antibiotic, banging, algo FROM Buggy WHERE id=?", (selected_buggy,))
+    cur.execute("SELECT id, qty_wheels, power_type, power_units, aux_power_type, aux_power_units, hamster_booster,"
+                " flag_color, flag_pattern, flag_color_secondary, tyres, qty_tyres, armour, attack, qty_attacks, "
+                "fireproof, insulated, antibiotic, banging, algo FROM Buggy WHERE id=?", (selected_buggy,))
     return jsonify(
         {k: v for k, v in dict(zip(
             [column[0] for column in cur.description], cur.fetchone())).items()

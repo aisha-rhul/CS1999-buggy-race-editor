@@ -4,7 +4,9 @@
 
     <script>
         let pennant = JSON.parse('{{ flag_selection| tojson | safe}}');
-
+        window.onload = function() {
+               drawFlag(pennant.pc,pennant.sc,pennant.pattern);
+        }
     </script>
 
   <h1>Updated Buggy</h1>
