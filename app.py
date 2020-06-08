@@ -315,11 +315,12 @@ def login():
                 if bcrypt.verify(password, row[0]):
                     return render_template('index.html')    # successful login
 
-        # reload login page for incorrect password
+        # Reload login page for incorrect password
         return render_template('login.html')
     except:
-        # report exception
+        # Report exception
         print("Exception - in login")
+        # Reload login page if no user exists or exception occurs
         return render_template('login.html')
     finally:
         con.close()
@@ -344,17 +345,15 @@ def register():
         # Insert user credentials to database table User
         cur.execute(''' INSERT INTO User (username, password, privilege_level, email) VALUES (?, ?, ?, ?)''',
                     (new_username, pwd_hash, "user", new_email))
-
-        # Get password from database table User
-        cur.execute("SELECT password FROM User WHERE username=?", (username,))
         con.commit()
 
-        # loads login page after successfully registering a user
+        # Load login page after successfully registering a user
         return render_template('login.html')
     except:
-        # report exception
+        # Report exception
         print("Exception - in register")
         con.rollback()
+        # Reload register page if exception occurs
         return render_template('register.html')
     finally:
         con.close()
@@ -416,6 +415,7 @@ def send_email():
         # Report exception
         print("Exception - in forgot-pass")
         con.rollback()
+        # Reload forgot password page if user does not exist or exception occurs
         return render_template('forgot-pass.html')
     finally:
         con.close()
@@ -436,6 +436,7 @@ def change_pass():
     if first_new_pwd == second_new_pwd and password == old_password:
         pwd_hash = bcrypt.hash(first_new_pwd)    # Generate hash of new password using bcrypt
     else:
+        # Reload change password page if old password is incorrect and both password entries don't match
         return render_template('change-pass.html')
 
     try:
@@ -447,11 +448,12 @@ def change_pass():
         cur.execute("UPDATE User set password=? WHERE username=?", (pwd_hash, username))
         con.commit()
 
-        # load login page after successfully updating password
+        # Load login page after successfully updating password
         return render_template('login.html')
     except:
-        # report exception
+        # Report exception
         print("Exception - in change password")
+        # Reload change password page if exception occurs
         return render_template('change-pass.html')
     finally:
         con.close()
