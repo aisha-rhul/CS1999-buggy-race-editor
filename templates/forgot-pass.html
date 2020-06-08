@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h2>Forgot Password?</h2>
+
+<form action="/forgot-pass" id="forgot-pass-form" method="post">
+    <input type="text" name="u" placeholder="Enter username" required="required"/>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block btn-large">Reset Password</button>
+        <p>A new password will be sent to the email linked with your account.</p>
+    </div>
+    
+     
+</form>
+    
+
+{% endblock %}

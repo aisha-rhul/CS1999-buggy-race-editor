@@ -2,6 +2,13 @@ from flask import Flask, render_template, request, jsonify, redirect
 import sqlite3 as sql
 import mimetypes
 from passlib.hash import bcrypt
+import random
+import string
+import smtplib
+from string import Template
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 
 app = Flask(__name__)
 
@@ -258,6 +265,15 @@ def register_page():
 
 
 # ------------------------------------------------------------
+# the forgot password page
+# ------------------------------------------------------------
+@app.route('/forgot-pass')
+def forgot_password_page():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template('forgot-pass.html', server_url=BUGGY_RACE_SERVER_URL)
+
+
+# ------------------------------------------------------------
 # login processing username, password are stored globally
 # ------------------------------------------------------------
 @app.route('/login', methods=['POST', 'GET'])
@@ -330,6 +346,67 @@ def register():
         print("Exception - in register")
         con.rollback()
         return render_template('register.html')
+    finally:
+        con.close()
+
+
+# ------------------------------------------------------------
+# sends an email with a new password to the user
+# ------------------------------------------------------------
+@app.route('/forgot-pass', methods=['POST', 'GET'])
+def send_email():
+    name = str(request.form['u'])  # Get username from user
+
+    try:
+        con = sql.connect(DATABASE_FILE)
+        con.row_factory = sql.Row
+        cur = con.cursor()
+
+        # Get user email from database table User
+        cur.execute("SELECT email FROM User WHERE username=?", (name,))
+        for row in cur.fetchall():
+            email = row[0]
+
+        # Generate random password of length 10
+        choice = string.ascii_letters + string.digits + string.punctuation
+        new_password = (''.join((random.choice(choice) for i in range(10))))
+
+        # Generate password hash using bcrypt for the random password
+        pwd_hash = bcrypt.hash(new_password)
+
+        # Set up the SMTP server
+        s = smtplib.SMTP(host="smtp.office365.com", port=587)
+        s.starttls()
+        s.login("aisha.buggy@outlook.com", "$Buggy123")
+
+        # Set Template object of the contents of the file specified by the filename
+        with open('message.txt', 'r', encoding='utf-8') as template_file:
+            template_file_content = template_file.read()
+        message_template = Template(template_file_content)
+
+        msg = MIMEMultipart()   # Create message
+        message = message_template.substitute(USERNAME=name, NEW_PASSWORD=new_password)
+
+        msg['From'] = "aisha.buggy@outlook.com"   # Sender email address
+        msg['To'] = email  # Recipient email address
+        msg['Subject'] = "Buggy Admin - Your new password"  # Subject of email
+
+        msg.attach(MIMEText(message, 'plain'))
+        s.send_message(msg)
+        del msg
+        s.quit()
+
+        # Update user's password in the database table User with the new random password hash
+        cur.execute("UPDATE User set password=? WHERE username=?", (pwd_hash, name))
+        con.commit()
+
+        # Load login page after successfully sending the user an email with their new password
+        return render_template('login.html')
+    except:
+        # Report exception
+        print("Exception - in forgot-pass")
+        con.rollback()
+        return render_template('forgot-pass.html')
     finally:
         con.close()
 

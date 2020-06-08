@@ -1,0 +1,10 @@
+Dear ${USERNAME},
+
+Your new password is:
+
+ ${NEW_PASSWORD} 
+
+Try not to forget this one ;)
+
+
+Admin

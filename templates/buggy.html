@@ -2,9 +2,19 @@
 
 {% block content %}
 
+    <script>
+        window.onload = function () {
+            $(function() {
+              let x = document.getElementById("buggy_record").getElementsByTagName("td");
+              x[15].style.backgroundColor = $(this).find('td:eq(15)').html();
+              x[19].style.backgroundColor = $(this).find('td:eq(19)').html();
+            });
+        }
+
+    </script>
   <h1>Buggy</h1>
 
-  <table>
+  <table id="buggy_record" class="buggy-record">
     <tr><td>ID:</td> <td> {{ buggy[0] }} </td></tr>
     <tr><td>Wheels:</td> <td> {{ buggy[1] }} </td></tr>
     <tr><td>Primary Power:</td> <td> {{ buggy[2] }} </td></tr>
