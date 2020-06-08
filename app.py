@@ -21,6 +21,7 @@ username = "guest"
 password = ""
 selected_buggy = 1
 
+
 # ------------------------------------------------------------
 # validate integer - num:number, lower:lower bound check
 # ------------------------------------------------------------
@@ -274,6 +275,15 @@ def forgot_password_page():
 
 
 # ------------------------------------------------------------
+# the change password page
+# ------------------------------------------------------------
+@app.route('/change-pass')
+def change_password_page():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template('change-pass.html', server_url=BUGGY_RACE_SERVER_URL)
+
+
+# ------------------------------------------------------------
 # login processing username, password are stored globally
 # ------------------------------------------------------------
 @app.route('/login', methods=['POST', 'GET'])
@@ -377,7 +387,7 @@ def send_email():
         # Set up the SMTP server
         s = smtplib.SMTP(host="smtp.office365.com", port=587)
         s.starttls()
-        s.login("aisha.buggy@outlook.com", "$Buggy123")
+        s.login("aisha.buggy@outlook.com", "%Buggy123%")
 
         # Set Template object of the contents of the file specified by the filename
         with open('message.txt', 'r', encoding='utf-8') as template_file:
@@ -407,6 +417,42 @@ def send_email():
         print("Exception - in forgot-pass")
         con.rollback()
         return render_template('forgot-pass.html')
+    finally:
+        con.close()
+
+
+# ------------------------------------------------------------
+# change a user's password
+# ------------------------------------------------------------
+@app.route('/change-pass', methods=['POST', 'GET'])
+def change_pass():
+    global username
+    global password
+
+    old_password = str(request.form['op'])   # Get old password from user
+    first_new_pwd = str(request.form['np1'])  # Get first entry of new password from user
+    second_new_pwd = str(request.form['np2'])  # Get second entry of new password from user
+
+    if first_new_pwd == second_new_pwd and password == old_password:
+        pwd_hash = bcrypt.hash(first_new_pwd)    # Generate hash of new password using bcrypt
+    else:
+        return render_template('change-pass.html')
+
+    try:
+        con = sql.connect(DATABASE_FILE)
+        con.row_factory = sql.Row
+        cur = con.cursor()
+
+        # Update user's password with hash of new password in database table User
+        cur.execute("UPDATE User set password=? WHERE username=?", (pwd_hash, username))
+        con.commit()
+
+        # load login page after successfully updating password
+        return render_template('login.html')
+    except:
+        # report exception
+        print("Exception - in change password")
+        return render_template('change-pass.html')
     finally:
         con.close()
 

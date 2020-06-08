@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h2>Change password</h2>
+
+<form action="/change-pass" id="change-pass-form" method="post">
+    <input type="password" name="op" placeholder="Enter old password" required="required"/>
+    <input type="password" name="np1" placeholder="Enter new password" required="required"/>
+    <input type="password" name="np2" placeholder="Enter new password" required="required"/>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block btn-large">Change Password</button>
+        <p>Use 8 or more characters with a mix of letters, numbers & symbols</p>
+    </div>
+    
+     
+</form>
+    
+
+{% endblock %}
