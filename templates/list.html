@@ -4,21 +4,6 @@
 
 {% block content %}
 
-    <script>
-        window.onload = function () {
-            $(function() {
-                let x = document.getElementById("buggies").getElementsByTagName("td");
-                let rowCount = $("#buggies tr").length;
-                let f1, f2;
-                for (let i = 1; i < rowCount ; i++) {
-                    f1=21*i+7; f2=21*i+9;
-                    x[f1].style.backgroundColor = $(this).find('td:eq(' + f1 + ')').html();
-                    x[f2].style.backgroundColor = $(this).find('td:eq(' + f2 + ')').html();
-                }
-            });
-        }
-    </script>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <h1>List Buggies</h1>
