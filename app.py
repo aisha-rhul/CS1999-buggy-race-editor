@@ -9,7 +9,6 @@ from string import Template
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-
 app = Flask(__name__)
 
 DATABASE_FILE = "database.db"
@@ -17,7 +16,7 @@ DEFAULT_BUGGY_ID = "1"
 
 BUGGY_RACE_SERVER_URL = "http://rhul.buggyrace.net"
 
-username = "guest"
+username = ""
 password = ""
 selected_buggy = 1
 
@@ -94,7 +93,7 @@ def get_last_buggy_id():
 
 
 # ------------------------------------------------------------
-# Validate consumable power types
+# validate consumable power types
 # ------------------------------------------------------------
 def valid_power_type(power_type, power_units):
     try:
@@ -254,7 +253,10 @@ def home():
 @app.route('/index')
 def index():
     mimetypes.add_type("text/css", ".css", True)
-    return render_template('index.html', server_url=BUGGY_RACE_SERVER_URL)
+    if username != "" and password != "":
+        return render_template('index.html', server_url=BUGGY_RACE_SERVER_URL)
+    return render_template('login.html', server_url=BUGGY_RACE_SERVER_URL)
+
 
 # ------------------------------------------------------------
 # the register page
@@ -280,7 +282,9 @@ def forgot_password_page():
 @app.route('/change-pass')
 def change_password_page():
     mimetypes.add_type("text/css", ".css", True)
-    return render_template('change-pass.html', server_url=BUGGY_RACE_SERVER_URL)
+    if username != "" and password != "":
+        return render_template('change-pass.html', server_url=BUGGY_RACE_SERVER_URL)
+    return render_template('login.html', server_url=BUGGY_RACE_SERVER_URL)
 
 
 # ------------------------------------------------------------
@@ -426,9 +430,6 @@ def send_email():
 # ------------------------------------------------------------
 @app.route('/change-pass', methods=['POST', 'GET'])
 def change_pass():
-    global username
-    global password
-
     old_password = str(request.form['op'])   # Get old password from user
     first_new_pwd = str(request.form['np1'])  # Get first entry of new password from user
     second_new_pwd = str(request.form['np2'])  # Get second entry of new password from user
@@ -467,166 +468,170 @@ def change_pass():
 @app.route('/new', methods=['POST', 'GET'])
 def create_buggy():
     mimetypes.add_type("text/css", ".css", True)
-    msg = []
-    buggy_id = DEFAULT_BUGGY_ID
-    valid_wheels = True
-    valid_power = True
-    valid_aux_power = True
-    valid_hamster = True
-    valid_tyres = True
-    valid_attacks = True
-    all_valid = False
 
-    msg.append("Invalid data input, record not written to database")
+    if username != "" and password != "":
+        msg = []
+        buggy_id = DEFAULT_BUGGY_ID
+        valid_wheels = True
+        valid_power = True
+        valid_aux_power = True
+        valid_hamster = True
+        valid_tyres = True
+        valid_attacks = True
+        all_valid = False
 
-    if request.method == 'GET':
-        buggy_id = get_last_buggy_id() + 1
-        return render_template("buggy-form.html", buggy=buggy_id, title="Make buggy")
-    elif request.method == 'POST':
-        try:
-            qty_wheels = request.form['qty_wheels'].strip()
-            valid_wheels = validate_integer(qty_wheels, 4)
-            if not valid_wheels or int(qty_wheels) % 2 != 0:
-                msg.append("Wheels - The number of wheels must be an even integer greater or equal to 4")
-                valid_wheels = False
+        msg.append("Invalid data input, record not written to database")
 
-            power_type = (request.form['power_type']).lower()
+        if request.method == 'GET':
+            buggy_id = get_last_buggy_id() + 1
+            return render_template("buggy-form.html", buggy=buggy_id, title="Make buggy")
+        elif request.method == 'POST':
+            try:
+                qty_wheels = request.form['qty_wheels'].strip()
+                valid_wheels = validate_integer(qty_wheels, 4)
+                if not valid_wheels or int(qty_wheels) % 2 != 0:
+                    msg.append("Wheels - The number of wheels must be an even integer greater or equal to 4")
+                    valid_wheels = False
 
-            power_units = request.form['power_units'].strip()
-            valid_power = validate_integer(power_units, 1)
-            if not valid_power:
-                msg.append("Power unit - Value must be an integer greater than or equal to 1")
+                power_type = (request.form['power_type']).lower()
 
-            if not valid_power_type(power_type, power_units):
-                msg.append("Power type/unit - Consumable primary power type can only have one power unit")
+                power_units = request.form['power_units'].strip()
+                valid_power = validate_integer(power_units, 1)
+                if not valid_power:
+                    msg.append("Power unit - Value must be an integer greater than or equal to 1")
 
-            aux_power_type = request.form['aux_power_type'].lower()
+                if not valid_power_type(power_type, power_units):
+                    msg.append("Power type/unit - Consumable primary power type can only have one power unit")
 
-            aux_power_units = request.form['aux_power_units'].strip()
-            valid_aux_power = validate_integer(aux_power_units, 0)
-            if not valid_aux_power:
-                msg.append("Aux Power - Value must be an integer greater than or equal to 0")
+                aux_power_type = request.form['aux_power_type'].lower()
 
-            if aux_power_type != "none" and int(aux_power_units) == 0:
-                msg.append("Aux Power Units - Cannot be zero when aux power type is chosen")
-                valid_aux_power = False
+                aux_power_units = request.form['aux_power_units'].strip()
+                valid_aux_power = validate_integer(aux_power_units, 0)
+                if not valid_aux_power:
+                    msg.append("Aux Power - Value must be an integer greater than or equal to 0")
 
-            if not valid_power_type(aux_power_type, aux_power_units):
-                msg.append("Power type/unit - Consumable auxiliary power type can only have one auxiliary power unit")
+                if aux_power_type != "none" and int(aux_power_units) == 0:
+                    msg.append("Aux Power Units - Cannot be zero when aux power type is chosen")
+                    valid_aux_power = False
 
-            hamster_booster = request.form['hamster_booster'].strip()
-            valid_hamster = validate_integer(hamster_booster, 0)
-            if not valid_hamster:
-                msg.append("Hamster Booster - Value must be an integer greater than or equal to 0")
+                if not valid_power_type(aux_power_type, aux_power_units):
+                    msg.append("Power type/unit - Consumable auxiliary power type can only have one auxiliary power unit")
 
-            if (power_type != "hamster" and aux_power_type != "hamster") and int(hamster_booster) > 0:
-                msg.append("Hamster Booster - Can only be set if power type is hamster")
-                valid_hamster = False
+                hamster_booster = request.form['hamster_booster'].strip()
+                valid_hamster = validate_integer(hamster_booster, 0)
+                if not valid_hamster:
+                    msg.append("Hamster Booster - Value must be an integer greater than or equal to 0")
 
-            if aux_power_type == "none" and int(aux_power_units) > 0:
-                msg.append("Auxiliary power - Cannot be greater than 0 if no auxiliary power is chosen")
-                valid_aux_power = False
+                if (power_type != "hamster" and aux_power_type != "hamster") and int(hamster_booster) > 0:
+                    msg.append("Hamster Booster - Can only be set if power type is hamster")
+                    valid_hamster = False
 
-            flag_color = request.form['flag_color']
-            flag_pattern = request.form['flag_pattern'].lower()
-            flag_color_secondary = request.form['flag_color_secondary']
-            tyres = request.form['tyres'].lower()
+                if aux_power_type == "none" and int(aux_power_units) > 0:
+                    msg.append("Auxiliary power - Cannot be greater than 0 if no auxiliary power is chosen")
+                    valid_aux_power = False
 
-            qty_tyres = request.form['qty_tyres'].strip()
-            if validate_integer(qty_wheels, 4):
-                if validate_integer(int(qty_tyres), 4) and (int(qty_tyres) >= int(qty_wheels)):
-                    valid_tyres = True
-                else:
-                    valid_tyres = False
-                    msg.append("Tyres - Number of Tyres must be an integer greater than or equal to number of wheels")
+                flag_color = request.form['flag_color']
+                flag_pattern = request.form['flag_pattern'].lower()
+                flag_color_secondary = request.form['flag_color_secondary']
+                tyres = request.form['tyres'].lower()
 
-            armour = request.form['armour'].lower()
-            attack = request.form['attack'].lower()
-            qty_attacks = request.form['qty_attacks'].strip()
-            valid_attacks = validate_integer(qty_attacks, 0)
-            if not valid_attacks:
-                msg.append("Attacks - Value must be an integer greater than or equal to 0")
+                qty_tyres = request.form['qty_tyres'].strip()
+                if validate_integer(qty_wheels, 4):
+                    if validate_integer(int(qty_tyres), 4) and (int(qty_tyres) >= int(qty_wheels)):
+                        valid_tyres = True
+                    else:
+                        valid_tyres = False
+                        msg.append("Tyres - Number of Tyres must be an integer greater than or equal to number of wheels")
 
-            if attack == "none" and int(qty_attacks) > 0:
-                msg.append("Attack quantity - Cannot be greater than zero when no attack is chosen")
-                valid_attacks = False
+                armour = request.form['armour'].lower()
+                attack = request.form['attack'].lower()
+                qty_attacks = request.form['qty_attacks'].strip()
+                valid_attacks = validate_integer(qty_attacks, 0)
+                if not valid_attacks:
+                    msg.append("Attacks - Value must be an integer greater than or equal to 0")
 
-            if attack != "none" and int(qty_attacks) == 0:
-                msg.append("Attack quantity - Cannot be zero when attack is chosen")
-                valid_attacks = False
+                if attack == "none" and int(qty_attacks) > 0:
+                    msg.append("Attack quantity - Cannot be greater than zero when no attack is chosen")
+                    valid_attacks = False
 
-            fireproof = 'fireproof' in request.form
-            insulated = 'insulated' in request.form
-            antibiotic = 'antibiotic' in request.form
-            banging = 'banging' in request.form
+                if attack != "none" and int(qty_attacks) == 0:
+                    msg.append("Attack quantity - Cannot be zero when attack is chosen")
+                    valid_attacks = False
 
-            algo = request.form['algo'].lower()
+                fireproof = 'fireproof' in request.form
+                insulated = 'insulated' in request.form
+                antibiotic = 'antibiotic' in request.form
+                banging = 'banging' in request.form
 
-            if valid_attacks and valid_aux_power and valid_hamster and valid_power and valid_tyres and valid_wheels and \
-                    valid_power_type(power_type, power_units) and valid_power_type(aux_power_type, aux_power_units):
-                all_valid = True
+                algo = request.form['algo'].lower()
 
-                action = request.form['action'].strip()
+                if valid_attacks and valid_aux_power and valid_hamster and valid_power and valid_tyres and valid_wheels and \
+                        valid_power_type(power_type, power_units) and valid_power_type(aux_power_type, aux_power_units):
+                    all_valid = True
+
+                    action = request.form['action'].strip()
 
                     # add/update record
-                if action == "create":
-                    buggy_id = get_last_buggy_id() + 1
-                    # insert record
-                    with sql.connect(DATABASE_FILE) as con:
-                        cur = con.cursor()
-                        cur.execute(''' INSERT INTO Buggy (qty_wheels, power_type, power_units, aux_power_type, 
-                            aux_power_units, hamster_booster, flag_color, flag_pattern, flag_color_secondary, tyres,
-                            qty_tyres, armour, attack, qty_attacks, fireproof, insulated, antibiotic, banging, algo) 
-                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ''',
-                                    (int(qty_wheels), power_type, int(power_units), aux_power_type,
-                                     int(aux_power_units), int(hamster_booster), flag_color, flag_pattern,
-                                     flag_color_secondary, tyres, int(qty_tyres), armour, attack, int(qty_attacks),
-                                     fireproof, insulated, antibiotic, banging, algo))
-                        cur.execute(''' INSERT INTO Ownership (buggy_id, username) VALUES (?, ?)''',
-                                    (buggy_id, username))
-                        con.commit()
-                        calc_cost()
-                        msg.clear()
-                        msg.append("New record added to database")
-                else:   # update table
-                    buggy_id = request.form['bid'].strip()     # get the selected buggy_id
-                    # buggy_id = 2
-                    with sql.connect(DATABASE_FILE) as con:
-                        cur = con.cursor()
-                        cur.execute("UPDATE Buggy set qty_wheels=? WHERE id=?", (int(qty_wheels), buggy_id))
-                        cur.execute("UPDATE Buggy set power_type=? WHERE id=?", (power_type, buggy_id))
-                        cur.execute("UPDATE Buggy set power_units=? WHERE id=?", (int(power_units), buggy_id))
-                        cur.execute("UPDATE Buggy set aux_power_type=? WHERE id=?", (aux_power_type, buggy_id))
-                        cur.execute("UPDATE Buggy set aux_power_units=? WHERE id=?", (int(aux_power_units), buggy_id))
-                        cur.execute("UPDATE Buggy set hamster_booster=? WHERE id=?", (int(hamster_booster), buggy_id))
-                        cur.execute("UPDATE Buggy set flag_color=? WHERE id=?", (flag_color, buggy_id))
-                        cur.execute("UPDATE Buggy set flag_pattern=? WHERE id=?", (flag_pattern, buggy_id))
-                        cur.execute("UPDATE Buggy set flag_color_secondary=? WHERE id=?", (flag_color_secondary, buggy_id))
-                        cur.execute("UPDATE Buggy set tyres=? WHERE id=?", (tyres, buggy_id))
-                        cur.execute("UPDATE Buggy set qty_tyres=? WHERE id=?", (int(qty_tyres), buggy_id))
-                        cur.execute("UPDATE Buggy set armour=? WHERE id=?", (armour, buggy_id))
-                        cur.execute("UPDATE Buggy set attack=? WHERE id=?", (attack, buggy_id))
-                        cur.execute("UPDATE Buggy set qty_attacks=? WHERE id=?", (int(qty_attacks), buggy_id))
-                        cur.execute("UPDATE Buggy set fireproof=? WHERE id=?", (fireproof, buggy_id))
-                        cur.execute("UPDATE Buggy set insulated=? WHERE id=?", (insulated, buggy_id))
-                        cur.execute("UPDATE Buggy set antibiotic=? WHERE id=?", (antibiotic, buggy_id))
-                        cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, buggy_id))
-                        cur.execute("UPDATE Buggy set algo=? WHERE id=?", (algo, buggy_id))
-                        con.commit()
-                        msg.clear()
-                        msg.append("Record successfully saved")
-        except:
-            con.rollback()
-            msg.append("update_buggy: error in update operation")
-        finally:
-            if all_valid:
-                calc_cost()
-                con.close()
-                flag_sel = {'pc': flag_color, 'sc': flag_color_secondary, 'pattern': flag_pattern}
-            else:
-                flag_sel = {'pc': "#ffffff", 'sc': "#ffffff", 'pattern': flag_pattern}
+                    if action == "create":
+                        buggy_id = get_last_buggy_id() + 1
+                        # insert record
+                        with sql.connect(DATABASE_FILE) as con:
+                            cur = con.cursor()
+                            cur.execute(''' INSERT INTO Buggy (qty_wheels, power_type, power_units, aux_power_type, 
+                                aux_power_units, hamster_booster, flag_color, flag_pattern, flag_color_secondary, tyres,
+                                qty_tyres, armour, attack, qty_attacks, fireproof, insulated, antibiotic, banging, algo) 
+                                VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ''',
+                                        (int(qty_wheels), power_type, int(power_units), aux_power_type,
+                                         int(aux_power_units), int(hamster_booster), flag_color, flag_pattern,
+                                         flag_color_secondary, tyres, int(qty_tyres), armour, attack, int(qty_attacks),
+                                         fireproof, insulated, antibiotic, banging, algo))
+                            cur.execute(''' INSERT INTO Ownership (buggy_id, username) VALUES (?, ?)''',
+                                        (buggy_id, username))
+                            con.commit()
+                            calc_cost()
+                            msg.clear()
+                            msg.append("New record added to database")
+                    else:   # update table
+                        buggy_id = request.form['bid'].strip()     # get the selected buggy_id
+                        # buggy_id = 2
+                        with sql.connect(DATABASE_FILE) as con:
+                            cur = con.cursor()
+                            cur.execute("UPDATE Buggy set qty_wheels=? WHERE id=?", (int(qty_wheels), buggy_id))
+                            cur.execute("UPDATE Buggy set power_type=? WHERE id=?", (power_type, buggy_id))
+                            cur.execute("UPDATE Buggy set power_units=? WHERE id=?", (int(power_units), buggy_id))
+                            cur.execute("UPDATE Buggy set aux_power_type=? WHERE id=?", (aux_power_type, buggy_id))
+                            cur.execute("UPDATE Buggy set aux_power_units=? WHERE id=?", (int(aux_power_units), buggy_id))
+                            cur.execute("UPDATE Buggy set hamster_booster=? WHERE id=?", (int(hamster_booster), buggy_id))
+                            cur.execute("UPDATE Buggy set flag_color=? WHERE id=?", (flag_color, buggy_id))
+                            cur.execute("UPDATE Buggy set flag_pattern=? WHERE id=?", (flag_pattern, buggy_id))
+                            cur.execute("UPDATE Buggy set flag_color_secondary=? WHERE id=?", (flag_color_secondary, buggy_id))
+                            cur.execute("UPDATE Buggy set tyres=? WHERE id=?", (tyres, buggy_id))
+                            cur.execute("UPDATE Buggy set qty_tyres=? WHERE id=?", (int(qty_tyres), buggy_id))
+                            cur.execute("UPDATE Buggy set armour=? WHERE id=?", (armour, buggy_id))
+                            cur.execute("UPDATE Buggy set attack=? WHERE id=?", (attack, buggy_id))
+                            cur.execute("UPDATE Buggy set qty_attacks=? WHERE id=?", (int(qty_attacks), buggy_id))
+                            cur.execute("UPDATE Buggy set fireproof=? WHERE id=?", (fireproof, buggy_id))
+                            cur.execute("UPDATE Buggy set insulated=? WHERE id=?", (insulated, buggy_id))
+                            cur.execute("UPDATE Buggy set antibiotic=? WHERE id=?", (antibiotic, buggy_id))
+                            cur.execute("UPDATE Buggy set banging=? WHERE id=?", (banging, buggy_id))
+                            cur.execute("UPDATE Buggy set algo=? WHERE id=?", (algo, buggy_id))
+                            con.commit()
+                            msg.clear()
+                            msg.append("Record successfully saved")
+            except:
+                con.rollback()
+                msg.append("update_buggy: error in update operation")
+            finally:
+                if all_valid:
+                    calc_cost()
+                    con.close()
+                    flag_sel = {'pc': flag_color, 'sc': flag_color_secondary, 'pattern': flag_pattern}
+                else:
+                    flag_sel = {'pc': "#ffffff", 'sc': "#ffffff", 'pattern': flag_pattern}
 
             return render_template("updated.html", msg=msg, flag_selection=flag_sel)
+
+    return render_template('login.html', server_url=BUGGY_RACE_SERVER_URL)
 
 
 # ------------------------------------------------------------
@@ -649,44 +654,46 @@ def edit_record():
 @app.route('/list', methods=['POST', 'GET'])
 def list_buggies():
     global selected_buggy
-    if request.method == 'POST':
-        try:
-            selection = []
-            buggy_id = request.form['selected_id']
 
-            selection = {
-                    'sel_primary_power': (request.form['sel_primary_power']).strip(),
-                    'sel_aux_power': (request.form['sel_aux_power']).strip(),
-                    'sel_flag_pattern': (request.form['sel_flag_pattern']).strip(),
-                    'sel_tyre_type': (request.form['sel_tyre_type']).strip(),
-                    'sel_armour': (request.form['sel_armour']).strip(),
-                    'sel_attack': (request.form['sel_attack']).strip(),
-                    'sel_fireproof': (request.form['sel_fireproof']).strip(),
-                    'sel_insulated': (request.form['sel_insulated']).strip(),
-                    'sel_antibiotic': (request.form['sel_antibiotic']).strip(),
-                    'sel_banging': (request.form['sel_banging']).strip(),
-                    'sel_algo': (request.form['sel_algo']).strip(),
-                    'sel_cost': get_buggy_cost(buggy_id),
-                    }
+    if username != "" and password != "":
+        if request.method == 'POST':
+            try:
+                selection = []
+                buggy_id = request.form['selected_id']
 
-            action = request.form['action'].strip()
-            if action == "delete":
-                delete_buggy(buggy_id)
-            if action == "json":
-                selected_buggy = int(buggy_id)
-                return redirect("./json", code=302)
+                selection = {
+                        'sel_primary_power': (request.form['sel_primary_power']).strip(),
+                        'sel_aux_power': (request.form['sel_aux_power']).strip(),
+                        'sel_flag_pattern': (request.form['sel_flag_pattern']).strip(),
+                        'sel_tyre_type': (request.form['sel_tyre_type']).strip(),
+                        'sel_armour': (request.form['sel_armour']).strip(),
+                        'sel_attack': (request.form['sel_attack']).strip(),
+                        'sel_fireproof': (request.form['sel_fireproof']).strip(),
+                        'sel_insulated': (request.form['sel_insulated']).strip(),
+                        'sel_antibiotic': (request.form['sel_antibiotic']).strip(),
+                        'sel_banging': (request.form['sel_banging']).strip(),
+                        'sel_algo': (request.form['sel_algo']).strip(),
+                        'sel_cost': get_buggy_cost(buggy_id),
+                        }
 
-            print(selection)
-        except:
-            print("list_buggies: error in update operation")
-        finally:
-            record = get_buggy_record(str(buggy_id))
-            if action == "edit":
-                return render_template("edit-record.html", title="Edit buggy", bid=buggy_id, sel=selection, buggy=record)
-    else:
-        all_records = get_records()
-    all_records = get_user_buggies()
-    return render_template("list.html", buggies=all_records)
+                action = request.form['action'].strip()
+                if action == "delete":
+                    delete_buggy(buggy_id)
+                if action == "json":
+                    selected_buggy = int(buggy_id)
+                    return redirect("./json", code=302)
+            except:
+                print("list_buggies: error in update operation")
+            finally:
+                record = get_buggy_record(str(buggy_id))
+                if action == "edit":
+                    return render_template("edit-record.html", title="Edit buggy", bid=buggy_id, sel=selection, buggy=record)
+        else:
+            all_records = get_records()
+        all_records = get_user_buggies()
+        return render_template("list.html", buggies=all_records)
+
+    return render_template('login.html', server_url=BUGGY_RACE_SERVER_URL)
 
 
 # ------------------------------------------------------------
@@ -716,8 +723,12 @@ def get_records():
 @app.route('/buggy')
 def show_buggies():
     mimetypes.add_type("text/css", ".css", True)
-    record = get_buggy_record(DEFAULT_BUGGY_ID)
-    return render_template("buggy.html", buggy=record)
+
+    if username != "" and password != "":
+        record = get_buggy_record(DEFAULT_BUGGY_ID)
+        return render_template("buggy.html", buggy=record)
+
+    return render_template('login.html', server_url=BUGGY_RACE_SERVER_URL)
 
 
 # ------------------------------------------------------------
@@ -740,18 +751,20 @@ def make_buggy():
 def summary():
     global selected_buggy
 
-    con = sql.connect(DATABASE_FILE)
-    con.row_factory = sql.Row
-    cur = con.cursor()
-    cur.execute("SELECT id, qty_wheels, power_type, power_units, aux_power_type, aux_power_units, hamster_booster,"
-                " flag_color, flag_pattern, flag_color_secondary, tyres, qty_tyres, armour, attack, qty_attacks, "
-                "fireproof, insulated, antibiotic, banging, algo FROM Buggy WHERE id=?", (selected_buggy,))
-    return jsonify(
-        {k: v for k, v in dict(zip(
-            [column[0] for column in cur.description], cur.fetchone())).items()
-         if (v != "" and v is not None)
-         }
-    )
+    if username != "" and password != "":
+        con = sql.connect(DATABASE_FILE)
+        con.row_factory = sql.Row
+        cur = con.cursor()
+        cur.execute("SELECT id, qty_wheels, power_type, power_units, aux_power_type, aux_power_units, hamster_booster,"
+                    " flag_color, flag_pattern, flag_color_secondary, tyres, qty_tyres, armour, attack, qty_attacks, "
+                    "fireproof, insulated, antibiotic, banging, algo FROM Buggy WHERE id=?", (selected_buggy,))
+        return jsonify(
+            {k: v for k, v in dict(zip(
+                [column[0] for column in cur.description], cur.fetchone())).items()
+             if (v != "" and v is not None)
+             }
+        )
+    return render_template('login.html', server_url=BUGGY_RACE_SERVER_URL)
 
 
 # ------------------------------------------------------------
@@ -759,8 +772,22 @@ def summary():
 # ------------------------------------------------------------
 @app.route('/logout')
 def logout():
+    global username
+    global password
+
     mimetypes.add_type("text/css", ".css", True)
+    username = ""
+    password = ""
     return render_template("login.html")
+
+
+# ------------------------------------------------------------
+# loads about page
+# ------------------------------------------------------------
+@app.route('/about')
+def about():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("about.html")
 
 
 # ------------------------------------------------------------

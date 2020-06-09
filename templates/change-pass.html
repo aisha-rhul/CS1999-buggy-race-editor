@@ -1,21 +1,26 @@
-{% extends "base.html" %}
+<link rel="stylesheet" type="text/css" href="/static/css/change-pass.css"/>
+<title>Change password</title>
+<nav class=nav>
+  <ul>
+    <li>
+      <a href="/index">Home</a>
+    </li>
+    <li>
+      <a href="/register">Register</a>
+    </li>
+    <li>
+      <a href="/forgot-pass">Forgot password</a>
+    </li>
+  </ul>
+</nav>
 
-{% block content %}
-
-
-<h2>Change password</h2>
-
-<form action="/change-pass" id="change-pass-form" method="post">
-    <input type="password" name="op" placeholder="Enter old password" required="required"/>
-    <input type="password" name="np1" placeholder="Enter new password" required="required"/>
-    <input type="password" name="np2" placeholder="Enter new password" required="required"/>
-    <div class="form-group">
+<div class="change-pass">
+    <h1>Change password</h1>
+    <form action="/change-pass" id="change-pass-form" method="post">
+        <input type="password" name="op" placeholder="Enter old password" required="required"/>
+        <input type="password" name="np1" placeholder="Enter new password" required="required"/>
+        <input type="password" name="np2" placeholder="Enter new password" required="required"/>
         <button type="submit" class="btn btn-primary btn-block btn-large">Change Password</button>
         <p>Use 8 or more characters with a mix of letters, numbers & symbols</p>
-    </div>
-    
-     
-</form>
-    
-
-{% endblock %}
+    </form>
+</div>

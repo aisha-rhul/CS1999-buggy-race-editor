@@ -1,32 +1,41 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<title>Buggy race editor</title>
   <h1>
-    My buggy editor
+    Welcome to the buggy race editor!
   </h1>
 
-  <div class="spacer">
-      <a href="/new" class="button">Make buggy</a>
-      <a href="/list" class="button">List buggies</a>
-      <a href="/buggy" class="button">Show default buggy</a>
-      <a href="/json" class="button">Get default buggy JSON</a>
-      <a href="/change-pass" class="button">Change password</a>
-      <a href="/logout" class="button">Log out</a>
+  <div class="navigation">
+      <a class="active" href="/index">Home</a>
+      <a href="/new">Make buggy</a>
+      <a href="/list">List buggies</a>
+      <a href="/buggy">Show buggy</a>
+      <a href="/json">Get buggy JSON</a>
+      <a href="/change-pass">Change password</a>
+      <a href="/about">About</a>
+      <a href="/logout">Log out</a>
   </div>
 
   <p>
-    Use this editor to specify a racing buggy. The editor saves it in its
-    little database and generates JSON data for the buggy. This is the data you
-    need to supply when you log into the
-    <strong><a href="{{ server_url }}">race server</a></strong> and enter your
-    buggy into the next race.
+      <u>Rules of the buggy race:</u>
+    <li>
+        The number of wheels for your buggy must be even and greater than 4.
+    </li>
+    <li>
+        You may only have <b> 1 unit </b> of power if your primary/secondary motive power is consumable.
+    </li>
+    <li>
+        You may only have hamster booster power units if your primary/secondary motive power is "Hamster booster".
+    </li>
+    <li>
+        You may only have <b> 1 unit </b> of power if your primary/secondary motive power is consumable.
+    </li>
+
   </p>
   <p>
-    Remember that if your data is not accepted by the race server, your buggy
-    will be disqualified from that race... so make sure you program your editor
-    correctly.
+    Your final design can be submitted by clicking
+    <strong><a href="http://rhul.buggyrace.net">here</a></strong>.
   </p>
 
-   <img id="racing" class="splash" src="/static/images/buggyracing.PNG"></img>
 {% endblock %}

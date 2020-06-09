@@ -1,23 +1,32 @@
-{% extends "base.html" %}
-
-{% block content %}
-
+<link rel="stylesheet" type="text/css" href="/static/css/register.css"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Register</title>
+<nav class=nav>
+  <ul>
+    <li>
+      <a href="/">Login</a>
+    </li>
+    <li>
+      <a class="current" href="/register">Register</a>
+    </li>
+    <li>
+      <a href="/forgot-pass">Forgot password</a>
+    </li>
+  </ul>
+</nav>
 
+<title>Register</title>
 <div class="register">
     <h1>Register</h1>
     <form action="/register" method="post">
-        <p>Create a username</p>
+        <p><h2>Create a username:</h2></p>
         <input type="text" name="u" placeholder="Enter username" required="required"/>
-        <p>Create a password</p>
+        <p><h2>Create a password:</h2></p>
         <input type="password" name="p" placeholder="Enter Password" required="required"/>
-        <p>Enter your email</p>
+        <p><h2>Enter your email:</h2></p>
         <input type="email" name="e" placeholder="Enter email" required="required"/>
+        <br><br>
         <button type="submit" class="btn btn-primary btn-block btn-large">Register</button>
     </form>
 </div>
-
-
-
-{% endblock %}
 

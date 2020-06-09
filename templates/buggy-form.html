@@ -4,10 +4,22 @@
 
 {% block content %}
 
-
+<title>Create your buggy</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <h1>{{title}}</h1>
+
+     <div class="navigation">
+      <a href="/index">Home</a>
+      <a class="active" href="/new">Make buggy</a>
+      <a href="/list">List buggies</a>
+      <a href="/buggy">Show buggy</a>
+      <a href="/json">Get buggy JSON</a>
+      <a href="/change-pass">Change password</a>
+      <a href="/about">About</a>
+      <a href="/logout">Log out</a>
+     </div>
+     <br>
 
     <label for="buggy_id">Buggy ID:</label>
     <input type="text" class="bid" id="buggy_id" name="buggy_id" value="{{ buggy }}" disabled>
@@ -148,7 +160,6 @@
     <br>
 
     <p>
-        <a href="/index" class="button">Home</a>
         <a href="#" onClick="autoFill(); return true;" class="button">Set Defaults</a>
         <a href="#" onClick="randomFill(); return true;" class="button">Set Random</a>
         <a href="#" onClick="submitMainForm(); return true;" class="button">Create new buggy</a>

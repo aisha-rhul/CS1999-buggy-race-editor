@@ -1,19 +1,24 @@
-{% extends "base.html" %}
+<link rel="stylesheet" type="text/css" href="/static/css/forgot-pass.css"/>
+<title>Forgot password</title>
+<nav class=nav>
+  <ul>
+    <li>
+      <a href="/">Login</a>
+    </li>
+    <li>
+      <a href="/register">Register</a>
+    </li>
+    <li>
+      <a class="current" href="/forgot-pass">Forgot password</a>
+    </li>
+  </ul>
+</nav>
 
-{% block content %}
-
-
-<h2>Forgot Password?</h2>
-
+<div class="forgot-pass">
+<h1>Forgot Password?</h1>
 <form action="/forgot-pass" id="forgot-pass-form" method="post">
     <input type="text" name="u" placeholder="Enter username" required="required"/>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary btn-block btn-large">Reset Password</button>
-        <p>A new password will be sent to the email linked with your account.</p>
-    </div>
-    
-     
+    <button type="submit" class="btn btn-primary btn-block btn-large">Reset Password</button>
+    <p><h2>A new password will be sent to the email linked with your account.</h2></p>
 </form>
-    
-
-{% endblock %}
+</div>

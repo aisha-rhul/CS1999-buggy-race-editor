@@ -3,25 +3,55 @@ html{
   padding: 0;
 }
 
+.navigation {
+  overflow: hidden;
+  background-color: rgb(23, 61, 135);
+  border-radius: 45em;
+  opacity: 0.8;
+}
+
+/* Style the links inside the navigation bar */
+.navigation a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.navigation a:hover {
+  background-color: #5b66c9;
+  color: #ffffff ;
+}
+
+/* Add a color to the active/current link */
+.navigation a.active {
+  background-color: #97a7cf;
+  color: white;
+}
+
 body {
   font-family: "Source Sans Pro","Helvetica Neue",Arial,Helvetica,sans-serif;
-  margin: 10px 10px;
+  margin: 0 auto;
   padding: 0;
   font-size: 1.2em;
-  color: #000000;
-  /*background-image: url('https://www.freepnglogos.com/uploads/road-png/road-moving-straight-background-tilesprite-phaser-html-9.png');*/
+  color: #303030;
+  background-image: url('https://www.freepnglogos.com/uploads/road-png/road-moving-straight-background-tilesprite-phaser-html-9.png');
   background-color: lightblue;
   background-repeat: no-repeat;
-  background-size: 80%;
+  background-size: 100%;
   text-align: left;
 }
 
 .main-content {
-  min-height:100vh;
+  overflow: scroll;
   padding: 1em;
-  width: 1300px;
-  height: auto;
-  margin: 10px 10px;
+  border-radius: 15px;
+  width: auto;
+  height: 700px;
+  margin: 50px auto;
   background-color: rgba(255, 255, 255, 0.4);
 }
 
@@ -33,19 +63,21 @@ p {
   margin: 1em 0;
 }
 
+/*THIS IS THE BUTTON!!!!!!! */
 a.button, input.button {
-  border:1px solid black;
+  border:1px solid #05153b;
   padding:0.5em;
   margin:0.5em;
-  border-radius: 0.25em;
+  border-radius: 0.45em;
   text-decoration: none;
-  background-color: white;
-  color: black;
-  box-shadow: 5px 5px 5px #999999;
+  background-color: #173d87;
+  opacity: 0.8;
+  color: white;
+  box-shadow: 2px 2px 2px 2px #6a8de5;
 }
 
 a.button:hover, input.button:hover {
-  background-color: black;
+  background-color: #5b66c9;
   color: white;
 }
 
@@ -57,7 +89,6 @@ input {
 input.button {
   background-color: #99ff99;
 }
-
 table {
   border:1px solid black;
   border-collapse: collapse;
@@ -65,11 +96,9 @@ table {
 }
 
 table td, table th {
-  padding: 0.25em;
   border: 1px solid #999;
   padding: 0.5rem;
 }
-
 .spacer {
   margin: 3em 0;
 }
@@ -82,6 +111,7 @@ label {
 
 input {
     margin-left: 10px;
+    background-color: #f4f6ec;
 }
 
 select {
@@ -89,6 +119,7 @@ select {
     margin-left: 10px;
     width: 212px;
     font-size:100%;
+    background-color: #f4f6ec;
 }
 
 br {
@@ -98,6 +129,11 @@ br {
 .other input.button {
   margin-left: 330px;
   cursor: grab;
+}
+
+h1 {
+  font-family: ".AppleSystemUIFont";
+  font-weight: bold;
 }
 
 @keyframes bgcolor {
@@ -133,28 +169,3 @@ body {
   -webkit-animation-direction: alternate;
   animation-direction: alternate;
 }
-
-.splash {
-  margin-left:70px;
-  width: 1150px;
-  height: 600px
-}
-
-.buggy-record {
-  margin-left: 30px;
-}
-
-.buggy-record td {
-  font-family: Arial;
-  font-size: 14pt;
-}
-
-.largespacer {
-  margin: 0em 10px;
-}
-
-.loginbutton {
-  height: 32px;
-  width: 80px;
-}
-

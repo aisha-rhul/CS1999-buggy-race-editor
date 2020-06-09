@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<title>About</title>
+  <h1>
+    About
+  </h1>
+
+<div class="navigation">
+    <a href="/index">Home</a>
+    <a href="/new">Make buggy</a>
+    <a href="/list">List buggies</a>
+    <a href="/buggy">Show buggy</a>
+    <a href="/json">Get buggy JSON</a>
+    <a href="/change-pass">Change password</a>
+    <a class="active" href="/about">About</a>
+    <a href="/logout">Log out</a>
+</div>
+
+ <p>
+    This website was created as part of the RHUL coursework for CS1999.
+    The idea is to create a virtual racing buggy according to the rules specified.
+    There are several options that you can choose to build a buggy. However, many options will
+    add add to the cost of the buggy and will affect its racing performance. Each buggy design
+    parameters can be converted to JSON format for entry into the race. The final design can
+    be submitted by clicking
+    <strong><a href="http://rhul.buggyrace.net">here</a></strong>.
+ </p>
+ <p>
+    Remember that if your data is not accepted by the race server, your buggy
+    will be disqualified from that race.
+ </p>
+
+{% endblock %}

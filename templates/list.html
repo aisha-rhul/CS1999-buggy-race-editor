@@ -3,11 +3,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<title>Your buggies</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <h1>List Buggies</h1>
 
+    <div class="navigation">
+      <a href="/index">Home</a>
+      <a href="/new">Make buggy</a>
+      <a class="active" href="/list">List buggies</a>
+      <a href="/buggy">Show buggy</a>
+      <a href="/json">Get buggy JSON</a>
+      <a href="/change-pass">Change password</a>
+      <a href="/about">About</a>
+      <a href="/logout">Log out</a>
+    </div>
+    <br>
   <table id="buggies" class="firstrow">
    <tr>
        <td>ID</td> <td>Wheels</td> <td>Pri Power</td><td>Pri Units</td> <td>Aux Power</td> <td>Aux Units</td>
@@ -50,7 +61,6 @@
   </form>
 
   <div class="spacer">
-      <a href="/index" class="button">Home</a>
       <a href="#" type="button" id="submit_id" name="submit_id" class="button" onclick="submitEdit()" value="Submit Edit">Edit</a>
       <a href="#" type="button" id="delete_rec" name="delete_rec" class="button" onclick="submitDelete()" value="Submit Delete">Delete</a>
       <a href="#" type="button" id="json" name="json" class="button" onclick="submitJSON()" value="Submit JSON">JSON</a>

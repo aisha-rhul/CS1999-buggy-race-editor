@@ -15,5 +15,6 @@ td {
 .firstrow tr:first-child td {
     vertical-align: top;
     color: #ffffff;
-    background-color: #00008B;
+    background-color: rgba(0, 0, 139, 0.72);
+    opacity: 0.8;
 }
