@@ -790,6 +790,59 @@ def about():
     return render_template("about.html")
 
 
+@app.route('/poster')
+def poster():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("poster.html")
+
+
+@app.route('/sell-buggy')
+def sellbuggy():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("sell-buggy.html")
+
+
+@app.route('/phase0')
+def phase0():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("phase0.html")
+
+
+@app.route('/phase1')
+def phase1():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("phase1.html")
+
+
+@app.route('/phase2')
+def phase2():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("phase2.html")
+
+
+@app.route('/phase3')
+def phase3():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("phase3.html")
+
+
+@app.route('/phase4')
+def phase4():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("phase4.html")
+
+
+@app.route('/phase5')
+def phase5():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("phase5.html")
+
+
+@app.route('/phase6')
+def phase6():
+    mimetypes.add_type("text/css", ".css", True)
+    return render_template("phase6.html")
+
 # ------------------------------------------------------------
 # delete the buggy - deletes a selected record
 # ------------------------------------------------------------

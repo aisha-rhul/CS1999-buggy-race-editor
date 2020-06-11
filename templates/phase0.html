@@ -1,0 +1,85 @@
+<link rel="stylesheet" type="text/css" href="/static/css/poster.css" xmlns:https="http://www.w3.org/1999/xhtml"/>
+
+<h1>PHASE 0</h1>
+
+<div class="navigation">
+    <a href="/index">Home</a>
+    <a href="/new">Make buggy</a>
+    <a href="/list">List buggies</a>
+    <a href="/buggy">Show buggy</a>
+    <a href="/json">Get buggy JSON</a>
+    <a href="/change-pass">Change password</a>
+    <a class="active" href="/poster">Poster</a>
+    <a href="/about">About</a>
+    <a href="/logout">Log out</a>
+</div>
+
+<nav class=nav>
+  <ul>
+    <li>
+      <a href="/poster">Sell Buggy</a>
+    </li>
+    <li>
+      <a class="current" href="/phase0">Phase 0</a>
+    </li>
+    <li>
+      <a href="/phase1">Phase 1</a>
+    </li>
+    <li>
+      <a href="/phase2">Phase 2</a>
+    </li>
+    <li>
+      <a href="/phase3">Phase 3</a>
+    </li>
+    <li>
+      <a href="/phase4">Phase 4</a>
+    </li>
+    <li>
+      <a href="/phase5">Phase 5</a>
+    </li>
+    <li>
+      <a href="/phase6">Phase 6</a>
+    </li>
+  </ul>
+  </nav>
+
+<section class="poster">
+    <div>
+        <h2>0-GET Get the source code</h2>
+        <p>
+            I first installed the latest copy of Python (v3.8). To get the source code, I downloaded and installed git
+            on my machine and then cloned a copy of the project from GitHub at:
+            <strong><a href="https://github.com/RHUL-CS-Projects/CS1999-buggy-race-editor">
+                https://github.com/RHUL-CS-Projects/CS1999-buggy-race-editor</a></strong>.
+            This created a local copy on my machine in a folder CS1999-buggy-race-editor.
+        </p>
+    </div>
+
+  <div>
+      <h2>0-RUN Get app running and view it in a browser</h2>
+      <p>
+          I then created a virtual environment venv and installed all the required components listed in <code>requirements.txt</code>
+          using pip. Following this, I created the database file by running the given python script <code>init_db.py
+          </code>. I set the environment variable for Flask as <code>FLASK_ENV="development".</code>
+      </p>
+      <p>
+          Running the <code>app.py</code> file started the Flask server. I then used a browser to view the site at
+          <strong><a href="http://127.0.0.1:500">http://127.0.0.1:500.</a></strong>
+          All worked well.
+      </p>
+  </div>
+
+  <br>
+
+  <div>
+
+      <h2>0-CHANGE Make a change to a template and see it appear</h2>
+      <p>
+          I made a small change to the index.html by adding the words "Buggy Options". I then checked that the change
+          took place in the browser to confirm.  I made my first commit on 15 May 20 to GitHub. This change was
+          reflected on GitHub at:
+          <strong><a href="https://github.com/aisha-rhul/CS1999-buggy-race-editor">
+              https://github.com/aisha-rhul/CS1999-buggy-race-editor</a></strong>
+      </p>
+  </div>
+</section>

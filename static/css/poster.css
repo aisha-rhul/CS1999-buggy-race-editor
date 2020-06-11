@@ -1,0 +1,130 @@
+.navigation {
+  overflow: hidden;
+  background-color: rgb(23, 61, 135);
+  border-radius: 45em;
+  opacity: 0.8;
+  font-family: "Trebuchet MS";
+}
+
+/* Style the links inside the navigation bar */
+.navigation a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.navigation a:hover {
+  background-color: #c95bb9;
+  color: #ffffff ;
+}
+
+/* Add a color to the active/current link */
+.navigation a.active {
+  background-color: #cf97c6;
+  color: white;
+}
+
+body {
+   background: linear-gradient(to bottom right, #66ffff 0%, #0099ff 80%););
+   font-family: "Trebuchet MS";
+}
+
+main-content {
+  overflow: scroll;
+  padding: 1em;
+  border-radius: 15px;
+  width: auto;
+  height: 550px;
+  margin: 120px auto;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.poster {
+  margin: 17px auto;
+  padding: 20px;
+  border: 0.5px solid #cbd5d5;
+  border-radius: 15px;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+h1 {
+  font-size: 45px;
+  text-align: center;
+  font-family: "Trebuchet MS";
+  color: #2e6d99;
+}
+
+h2 {
+  font-family: "Trebuchet MS";
+  color: #678490;
+  font-size: 40px;
+}
+
+p {
+  font-size: 20px;
+  font-family: "Trebuchet MS";
+  line-height: 25px;
+  color: #476978;
+}
+
+li {
+  font-family: "Trebuchet MS";
+  font-size: 20px;
+  color: #476978;
+  line-height: 40px;
+}
+
+g {
+  color: green;
+  font-family: "Trebuchet MS";
+  font-size: 20px;
+}
+
+r {
+  color: #b32929;
+  font-family: "Trebuchet MS";
+  font-size: 20px;
+}
+
+/* navigation bar */
+nav {
+  max-width: 1180px;
+  mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #ffffff 25%, #ffffff 75%, rgba(255, 255, 255, 0) 100%);
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+nav ul {
+  text-align: center;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 25%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 255, 255, 0) 100%);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+nav ul li {
+  display: inline-block;
+}
+
+nav ul li a {
+  padding: 18px;
+  font-family: "Trebuchet MS";
+  text-transform:uppercase;
+  color: rgba(0, 35, 122, 0.5);
+  font-size: 18px;
+  display: block;
+}
+
+nav ul li a:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(0, 35, 122, 0.7);
+}
+
+.current {
+  background-color: #6990e5;
+  color: white;
+  opacity: 0.65;
+}

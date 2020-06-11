@@ -1,0 +1,90 @@
+<link rel="stylesheet" type="text/css" href="/static/css/poster.css"/>
+<h1>PHASE 2</h1>
+<div class="navigation">
+    <a href="/index">Home</a>
+    <a href="/new">Make buggy</a>
+    <a href="/list">List buggies</a>
+    <a href="/buggy">Show buggy</a>
+    <a href="/json">Get buggy JSON</a>
+    <a href="/change-pass">Change password</a>
+    <a class="active" href="/poster">Poster</a>
+    <a href="/about">About</a>
+    <a href="/logout">Log out</a>
+</div>
+
+<nav class=nav>
+  <ul>
+    <li>
+      <a href="/poster">Sell Buggy</a>
+    </li>
+    <li>
+      <a href="/phase0">Phase 0</a>
+    </li>
+    <li>
+      <a href="/phase1">Phase 1</a>
+    </li>
+    <li>
+      <a class="current" href="/phase2">Phase 2</a>
+    </li>
+    <li>
+      <a href="/phase3">Phase 3</a>
+    </li>
+    <li>
+      <a href="/phase4">Phase 4</a>
+    </li>
+    <li>
+      <a href="/phase5">Phase 5</a>
+    </li>
+    <li>
+      <a href="/phase6">Phase 6</a>
+    </li>
+  </ul>
+  </nav>
+
+<section class="poster">
+    <div>
+        <h2>2-EDIT Edit the record by loading its current values into the form</h2>
+        <p>
+            To accomplish this, I decided to create a couple of separate pages, <code>list.html</code> and <code>edit-record.html</code> based on the
+            <code>buggy-form</code>. The reason for this is because, I wanted to allow a user to select from a list of buggies
+            available and then edit them using a separate form. This task involved writing scripts <code>jQselector.js</code>,
+            <code>loadselected.js</code> and <code>submit.js</code>.
+        </p>
+        <p>
+            The function <code>display_buggies()</code> in <code>app.py</code> reads all buggies from the database table and displays them in
+            <code>list.html</code>. Once a user selects a buggy, the selection is identified by a jQuery and stored in a hidden form
+            which is submitted to Flask via <code>submit.js</code>. User selection data is also passed as JSON from Flask to
+            <code>edit-record</code>.
+        </p>
+        <p>
+            Once a selection is made, the <code>edit-record.html</code> is rendered for the user to edit.
+        </p>
+        <g>This task is tested to be working well.</g>
+    </div>
+
+  <br>
+    <div>
+        <h2>2-COST Calculate and save the game cost of the buggy</h2>
+        <p>
+            To calculate the cost, I though of storing all the required data in separate tables
+            'Tyre Type' and 'Offensive Capability'). I then wrote functions to calculate the cost of the buggy by
+            reading these tables for the cost parameters calculating the total cost in the function <code>calculate_cost()</code>
+            in <code>app.py</code>. Please note, I have renamed the buggies table to Buggy.
+            Cost calculation is verified to be working correctly.
+        </p>
+        <g>This task is tested to be working well.</g>
+    </div>
+
+  <br>
+
+  <div>
+      <h2>2-RULES Add validation according to the game rules</h2>
+      <p>
+          This involved writing several if statements in <code>create_buggy()</code> to check the form data according to the rules
+          of the game. I modifies the <code>validate_integer()</code> function to accept two parameters in order to check for
+          upperbound value as well as for integer type. These tests are documented in the <code>TESTING.md</code> file and are all
+          verified to be working correctly.
+      </p>
+      <g>This task is tested to be working well.</g>
+  </div>
+</section>

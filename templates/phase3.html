@@ -1,0 +1,155 @@
+<link rel="stylesheet" type="text/css" href="/static/css/poster.css"/>
+<h1>PHASE 3</h1>
+<div class="navigation">
+    <a href="/index">Home</a>
+    <a href="/new">Make buggy</a>
+    <a href="/list">List buggies</a>
+    <a href="/buggy">Show buggy</a>
+    <a href="/json">Get buggy JSON</a>
+    <a href="/change-pass">Change password</a>
+    <a class="active" href="/poster">Poster</a>
+    <a href="/about">About</a>
+    <a href="/logout">Log out</a>
+</div>
+
+<nav class=nav>
+  <ul>
+    <li>
+      <a href="/poster">Sell Buggy</a>
+    </li>
+    <li>
+      <a href="/phase0">Phase 0</a>
+    </li>
+    <li>
+      <a href="/phase1">Phase 1</a>
+    </li>
+    <li>
+      <a href="/phase2">Phase 2</a>
+    </li>
+    <li>
+      <a class="current" href="/phase3">Phase 3</a>
+    </li>
+    <li>
+      <a href="/phase4">Phase 4</a>
+    </li>
+    <li>
+      <a href="/phase5">Phase 5</a>
+    </li>
+    <li>
+      <a href="/phase6">Phase 6</a>
+    </li>
+  </ul>
+  </nav>
+
+<section class="poster">
+    <div>
+        <h2>3-ENV Switch to using development or production environments</h2>
+        <p>
+            I experimented with this by setting the environment variable <code>FLASK_ENV="development"</code> to
+            <code>FLASK_ENV="production"</code>. It was useful to see that the Flask server reloaded automatically when
+            the code changed.
+        </p>
+    </div>
+
+    <br>
+
+    <div>
+        <h2>3-AUTOFILL Add auto-fill to the edit forms</h2>
+        <p>
+            Added a button in <code>buggy-form.html</code> to load default values for each of the form fields using JavaScript
+            <code>autoFill.js</code>. This simply changes the <code>.value</code> of the input fields and the <code>.checked</code>
+            attributes of the checkboxes to the specified defaults. e.g.
+        </p>
+        <p>
+            <code>document.getElementById("power_type").value = "Petrol";</code>
+        </p>
+        <p>
+        <code>document.getElementById("fireproof").checked = false;</code>
+        </p>
+        <p>
+            I also added a button to generate random data for the buggies using JavaScript. However, the data generated
+            does not follow validation rules. This could have been added, but decided to leave it due to lack of time.
+        </p>
+        <p>
+            <g>This part is tested to be working well.</g>
+        </p>
+    </div>
+
+    <br>
+
+    <div>
+        <h2>3-MULTI Allow different buggies to be created</h2>
+        <p>
+            In order to allow new buggies to be created in addition to the default buggy id=1, I had to modify the
+            <code>create_buggy()</code> function to include SQL statements to <code>INSERT</code> a new record in the Buggy table.
+            The id field is auto generated in the table during an <code>INSERT</code> operation.
+        </p>
+        <p>
+            I had to check the user selection in list.html and this is stored in a hidden form called "edit-list" in a
+            field called "action". The value of action can be "add", "edit" or "delete" depending on what the user
+            selects.
+        </p>
+        <p>
+            Also, I found it convenient to share the buggy selection between forms by storing this value in local storage.
+        </p>
+        <p>
+            <code>document.getElementById("bid").value = sessionStorage.getItem('buggy_id');</code>
+        </p>
+        <p>
+            <g>This part is tested to be working well.</g>
+        </p>
+    </div>
+
+  <br>
+
+      <div>
+          <h2>3-DEL Allow buggies to be deleted</h2>
+      <p>
+          A user has the option to delete a buggy from the <code>list.html</code> page. The selection is recorded in the "action"
+          field and passed to Flask. Flask, then calls the function <code>delete_buggy(buggy_id)</code> to remove it from the
+          database table.
+      </p>
+      <p>
+          <g>This part is tested to be working well.</g>
+      </p>
+      </div>
+
+  <br>
+
+  <div>
+     <h2>3-FLAG Display the pennant graphically</h2>
+      <p>
+          During the creation of the buggy, a pennant is generated using JavaScript based on the user selection of the
+          flag attributes. This is accomplished by using JavaScript. A function <code>drawFlag()</code> was written that calls
+          <code>dStripe()</code>, <code>vStripe()</code>, <code>hStripe()</code> or <code>checkered()</code>
+          functions depending on the chosen pattern. The latter functions use a canvas of a fixed size to draw the pattern.
+          When a valid buggy is created, a flag is drawn, otherwise the canvas is left blank.
+      </p>
+      <p>
+          This JavaScript is inserted withing <code>updated.html</code> after the canvas element. I wanted this to be in a separate
+          file but for some reason, could not get it working. But works fine when in the HTML.
+      </p>
+      <p>
+          <g>This task has been tested working well.</g>
+      </p>
+  </div>
+
+  <br>
+
+  <div>
+      <h2>3-TESTS Write some tests</h2>
+      <p>
+          Tests were conducted throughout during development. After adding each feature, I tested the program for
+          functionality. Also I explored the Unittests available in Python and included a few tests in a test program
+          called <code>test_app.py</code>. I tested the program with a variety of inputs, valid, invalid and boundary values. Also,
+          where the output was a rendered page or an action in a database, I checked to see if these were performed.
+          Perhaps, I should have created a test plan and followed that to prove the functionality but much of the time
+          was needed for coding. I tested the functions one by one for functionality by creating fake data and checking
+          the output with that expected. When the whole application was complete further tests were carries out.
+          Testing revealed a few bugs that were quickly eradicated.
+      </p>
+      <p>
+          <g>The application as a whole is tested to be functional and working well as expected.</g>
+      </p>
+  </div>
+</section>

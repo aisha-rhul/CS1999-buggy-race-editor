@@ -1,0 +1,159 @@
+<link rel="stylesheet" type="text/css" href="/static/css/poster.css"/>
+<h1>PHASE 5</h1>
+<div class="navigation">
+    <a href="/index">Home</a>
+    <a href="/new">Make buggy</a>
+    <a href="/list">List buggies</a>
+    <a href="/buggy">Show buggy</a>
+    <a href="/json">Get buggy JSON</a>
+    <a href="/change-pass">Change password</a>
+    <a class="active" href="/poster">Poster</a>
+    <a href="/about">About</a>
+    <a href="/logout">Log out</a>
+</div>
+
+<nav class=nav>
+  <ul>
+    <li>
+      <a href="/poster">Sell Buggy</a>
+    </li>
+    <li>
+      <a href="/phase0">Phase 0</a>
+    </li>
+    <li>
+      <a href="/phase1">Phase 1</a>
+    </li>
+    <li>
+      <a href="/phase2">Phase 2</a>
+    </li>
+    <li>
+      <a href="/phase3">Phase 3</a>
+    </li>
+    <li>
+      <a href="/phase4">Phase 4</a>
+    </li>
+    <li>
+      <a class="current" href="/phase5">Phase 5</a>
+    </li>
+    <li>
+      <a href="/phase6">Phase 6</a>
+    </li>
+  </ul>
+  </nav>
+
+<section class="poster">
+    <div>
+        <h2>5-VIZ Visual representation of the buggy</h2>
+        <p>
+            For this talk, I managed to display the chosen colours in the list of buggies table rather than just their
+            colour codes. This task was achieved by using JavaScript which executes immediately after the <code>list.html</code> is
+            loaded. This was a bit challenging as I had to find a way of colouring specific data attributes in a table with any
+            number of rows. The problem was finding a formula that will point at the specific rows. Also, I had trouble
+            passing a variable to a jQuery function but solved it in the end. I came up with the following code which
+            did the trick.
+        </p>
+        <p>
+            <code>
+                $(function() {
+                <p>&emsp; &emsp; <code>let x = document.getElementById("buggies").getElementsByTagName("td");<code></p>
+                <p>&emsp; &emsp; <code>let rowCount = $("#buggies tr").length;</code></p>
+                <p>&emsp; &emsp; <code>let f1, f2;</code></p>
+                <p>&emsp; &emsp; <code>for (let i = 1; i < rowCount ; i++) {</code></p>
+                <p>&emsp;&emsp;&emsp;&emsp;<code>f1=21*i+7; f2=21*i+9;</code></p>
+                <p>&emsp;&emsp;&emsp;&emsp;<code>x[f1].style.backgroundColor = $(this).find('td:eq(' + f1 + ')').html();</code></p>
+                <p>&emsp;&emsp;&emsp;&emsp;<code>x[f2].style.backgroundColor = $(this).find('td:eq(' + f2 + ')').html();</code></p>
+                <p>&emsp;&emsp;&emsp;<code> } </code></p>
+                <p>&emsp;&emsp;<code> });</code></p>
+            </code>
+
+        <p>
+            I could have done more to represent the buggy visually such as inserting icons of wheels to represent their
+            count, shown pictures of a selected power type, tyre and armour from a library.
+        </p>
+        <p>
+            <g>This task is tested to be working well.</g>
+        </p>
+    </div>
+
+  <br>
+
+    <div>
+        <h2>5-RESET Password reset</h2>
+        <p>
+            This was coded as a separate option in the login page. A user is allowed to enter their login name and
+            request a password reset. No messages are displayed to say if the reset was successful other than a fixed
+            message to tell the user that if they are registered, they will receive an email. The email message is not
+            fixed in the code but is read from a text file <code>message.txt</code> in the project root. This way an
+            admin can change the message as required.
+        </p>
+        <p>
+            I registered an email address with outlook.com to test this. An email is successfully sent out to the
+            registered email of the user. The message is as follows:
+        </p>
+
+        <code>
+            <p>&emsp;&emsp;<code>Dear ${USERNAME}, Your new password is:</code></p>
+            <p>&emsp;&emsp;<code>${NEW_PASSWORD}</code></p>
+            <p>&emsp;&emsp;<code>Try not to forget this one ;)</code></p>
+            <p>&emsp;&emsp;<code>Admin</code></p>
+        </code>
+
+       <p>
+           <g>This task is tested to be working well.</g>
+       </p>
+    </div>
+
+  <br>
+
+    <div>
+        <h2>5-RACELOG Store a history of race results for the buggies in your app</h2>
+        <p>
+            This task was not completed. Ran out of time! However, I believe, I can do it given the API details.
+            Assuming the data is sent as a JSON, Flask can be setup to listen for JSON's on a particular port. So, a
+            function similar to one below might be needed.
+        </p>
+        <code>
+            <p><code>@app.route('/api/receive_message/&lt;uuid&gt;', methods=['GET', 'POST'])</code></p>
+            <p><code>def receive_message(uuid):</code></p>
+            <p>&emsp;&emsp;<code>content = request.json</code></p>
+            <p>&emsp;&emsp;<code>print content['mytext']</code></p>
+            <p>&emsp;&emsp;<code>return jsonify({"uuid":uuid})</code></p>
+        </code>
+        <p>
+            <r>I may need to think about the security aspect as I guess the race results may be sent encrypted?</r>
+        </p>
+  </div>
+
+  <br>
+
+  <div>
+      <h2>5-ADMIN Add admin capabilities to superusers</h2>
+      <p>
+          I decided to use a column for user privilege so that users other than Admin can have admin privileges.
+          Currently, there are two privileges, 'user' and 'admin', but more privileges can be added as required. In this
+          case some changes to the code will be needed to process them.
+      </p>
+      <p>
+          <g>This task is tested to be working well.</g>
+      </p>
+  </div>
+
+  <br>
+
+  <div>
+    <h2>5-API Use the server API for submitting the buggy data</h2>
+      <p>
+          This task was not completed. Ran out of time!
+          However, I believe, I can do it given the API details. A possible way to send a JSON is to use the
+          <code> request.post</code> method.
+      </p>
+
+      <p>def send_jason(buggy_id):</p>
+      <p>&emsp;&emsp; <code>jason = summary(</code>)</p>
+      <p>&emsp;&emsp; <code>result = requests.post('http://rhul.buggyrace.net/', json})</code></p>
+
+      <p>
+          <r>Again, I am not sure about how the authentication will work but need the API details.</r>
+      </p>
+  </div>
+</section>

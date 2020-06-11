@@ -1,0 +1,82 @@
+<link rel="stylesheet" type="text/css" href="/static/css/poster.css"/>
+<h1>PHASE 1</h1>
+<div class="navigation">
+    <a href="/index">Home</a>
+    <a href="/new">Make buggy</a>
+    <a href="/list">List buggies</a>
+    <a href="/buggy">Show buggy</a>
+    <a href="/json">Get buggy JSON</a>
+    <a href="/change-pass">Change password</a>
+    <a class="active" href="/poster">Poster</a>
+    <a href="/about">About</a>
+    <a href="/logout">Log out</a>
+</div>
+
+<nav class=nav>
+  <ul>
+    <li>
+      <a href="/poster">Sell Buggy</a>
+    </li>
+    <li>
+      <a href="/phase0">Phase 0</a>
+    </li>
+    <li>
+      <a class="current" href="/phase1">Phase 1</a>
+    </li>
+    <li>
+      <a href="/phase2">Phase 2</a>
+    </li>
+    <li>
+      <a href="/phase3">Phase 3</a>
+    </li>
+    <li>
+      <a href="/phase4">Phase 4</a>
+    </li>
+    <li>
+      <a href="/phase5">Phase 5</a>
+    </li>
+    <li>
+      <a href="/phase6">Phase 6</a>
+    </li>
+  </ul>
+  </nav>
+
+<section class="poster">
+
+    <div>
+        <h2>1-ADD Add more data to the form</h2>
+        <p>
+            Added the next option primary_power in the <code>buggy-form.html.</code> This involved adding a label and an input field
+            to provide the options. A line was also added to receive the submitted form data. The data collected had to
+            be updated in the database, so I modified the <code>create_buggy()</code> function to include an extra line of SQL. I
+            then modified the buggies table in the database.db file to include the <code>primary_power</code> field using DB Browser.
+            I realise now that I should have done this step using the <code>init_db.py</code> file, however, ultimately, I updated
+            this file to create all necessary tables and fields and add data.
+        </p>
+        <p>
+            <g>Once this was tested working, I added all the necessary input in the form and committed them in stages.</g>
+        </p>
+    </div>
+
+    <br>
+
+    <div>
+        <h2>1-VALID Add basic data validation</h2>
+        <p>
+            Wrote a function in Python <code>validate_integer()</code> to check if a value entered is an integer and called it after
+            receiving form data. This worked well. I decided to leave the rest of the validation for the next phase.
+        </p>
+        <g>This task is tested to be working well.</g>
+    </div>
+
+    <br>
+
+    <div>
+        <h2>1-STYLE Style your editor just how you like it</h2>
+        <p>
+            I modified the app.css file to align the labels, input fields and checkboxes by adjusting the <code>margin-left:
+            10px</code> and also adding <code>label</code>, <code>select</code>, <code>br</code> and <code>.other</code> classes.
+        </p>
+        <g>This task is tested to be working well.</g>
+    </div>
+</section>

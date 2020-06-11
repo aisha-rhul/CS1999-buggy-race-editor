@@ -1,264 +1,107 @@
-{% extends "base.html" %}
+<link rel="stylesheet" type="text/css" href="/static/css/poster.css"/>
 
-{% block content %}
+<title>Poster</title>
 
-  <h1>Poster</h1>
+  <h1>POSTER</h1>
 
-    <section class="test">
+    <div class="navigation">
+        <a href="/index">Home</a>
+        <a href="/new">Make buggy</a>
+        <a href="/list">List buggies</a>
+        <a href="/buggy">Show buggy</a>
+        <a href="/json">Get buggy JSON</a>
+        <a href="/change-pass">Change password</a>
+        <a class="active" href="/poster">Poster</a>
+        <a href="/about">About</a>
+        <a href="/logout">Log out</a>
+    </div>
 
-  <div class="test">
-    <h2>0-GET Get the source code</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
+  <nav class=nav>
+  <ul>
+    <li>
+      <a class="current" href="/poster">Sell Buggy</a>
+    </li>
+    <li>
+      <a href="/phase0">Phase 0</a>
+    </li>
+    <li>
+      <a href="/phase1">Phase 1</a>
+    </li>
+    <li>
+      <a href="/phase2">Phase 2</a>
+    </li>
+    <li>
+      <a href="/phase3">Phase 3</a>
+    </li>
+    <li>
+      <a href="/phase4">Phase 4</a>
+    </li>
+    <li>
+      <a href="/phase5">Phase 5</a>
+    </li>
+    <li>
+      <a href="/phase6">Phase 6</a>
+    </li>
+  </ul>
+  </nav>
 
-  </div>
+<section class="poster">
+    <p><h2>What is the buggy race editor?</h2></p>
+    <p>The buggy race editor is a website that allows you to create your own virtual buggy!</p>
+    <p>There are several options to choose from to ensure that your buggy has the best specification and is ready to race.</p>
 
-  <div class="test">
-    <h2>0-RUN Get app running and view it in a browser</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
+    <p><h2>What's great about the buggy race editor?</h2></p>
+    <p>This editor will let you create a customised buggy of your choice!</p>
+    <p>When customising your buggy, there are certain rules that you must follow in order to submit your buggy to the race</p>
+    <p>These rules are listed on the
+        <strong><a href="/index">home page</a></strong>. Be sure to follow these rues or you will not be allowed to enter the race!</p>
 
-  <div class="test">
-  <h2>0-CHANGE Make a change to a template and see it appear</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
+    <p><h2>What can you do with it?</h2></p>
+    <p>You can race your customised buggy with other users. This can be done by clicking
+        <strong><a href="http://rhul.buggyrace.net">here</a></strong>.</p>
+    <p>There will be a race every night and results will be displayed once the race has finished.</p>
 
-  <div class="test">
-    <h2>0-CHANGE Make a change to a template and see it appear</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
+    <p><h2>What features does it have?</h2></p>
+    <p>The features when creating your buggy include:</p>
+    <ul>
+        <li>Number of wheels</li>
+        <li>A primary motive power</li>
+        <li>Units for your primary motive power</li>
+        <li>A secondary motive power (in case your primary runs out)</li>
+        <li>Units for your secondary motive power</li>
+        <li>Flag colours and patterns (this flag is generated for your customised buggy!)</li>
+        <li>Type of your tyres</li>
+        <li>Number of tyres (in case one breaks down)</li>
+        <li>Armour for your buggy</li>
+        <li>The type of attack</li>
+        <li>The number of attacks</li>
+        <li>If you would like your buggy to be fireproof</li>
+        <li>If you would like your buggy to be insulated</li>
+        <li>If you would like your buggy to have antibiotic enabled</li>
+        <li>If you would like your buggy to have banging enabled</li>
+        <li>And of course, the algorithm that your buggy will have when racing!</li>
+    </ul>
+    <p>After choosing your buggy specification, a total cost will then be displayed to you.</p>
+    <p>You may also choose a default buggy or a random buggy if you would like.</p>
 
-  <div class="test">
-    <h2>1-ADD Add more data to the form</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
+    <p><h2>Preview of the race editor!</h2></p>
+    <p><img src="./static/images/login_screen.png" width="800px"></p>
+    <p>The image above shows a login screen which you will use to login.</p>
+    <p>If you do not already have an account, use the navigation bar at the top to register</p>
+    <p>If you have forgotten your password, click "forgot password" from the navigation bar and you will be redirected
+        to a page which will ask you for your username.</p>
+    <p>An email will then be sent to the email you used when you registered with that username.</p>
 
-  <div class="test">
-    <h2>1-VALID Add basic data validation</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
+    <p><img src="./static/images/create_buggy.png" width="520px"></p>
+    <p>The images above shows the page where you create your buggy.  </p>
 
-  <div class="test">
-    <h2>1-STYLE Style your editor just how you like it</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
+    <p><img src="./static/images/view_buggies.png" width="1400px"></p>
+    <p>The image above shows a table with all the buggies you have created.</p>
+    <p>You may choose to edit or delete any of your buggies that you have created</p>
 
-  <div class="test">
-    <h2>2-EDIT Edit the record by loading its current values into the form</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>2-COST Calculate and save the game cost of the buggy</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>2-RULES Add validation according to the game rules</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>3-ENV Switch to using development or production environments</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>3-AUTOFILL Add auto-fill to the edit forms</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>3-MULTI Allow different buggies to be created</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>3-DEL Allow buggies to be deleted</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-     <h2>3-FLAG Display the pennant graphically</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>3-TESTS Write some tests</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>4-USERS Add users (and sessions) so not just anyone can edit a buggy</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-     <h2>4-OWNER A buggy belongs to a user</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>4-PASS Add password protection to the users</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>5-VIZ Visual representation of the buggy</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>5-RESET Password reset</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>5-RACELOG Store a history of race results for the buggies in your app</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-     <h2>5-ADMIN Add admin capabilities to superusers</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>5-API Use the server API for submitting the buggy data</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-  <div class="test">
-    <h2>6-FREE Add custom features to the editor</h2>
-  <p>
-    <!-- sentence on _how_ you fixed it -->
-  </p>
-  <p>
-    <!-- sentence(s) on anything interesting/incomplete you did -->
-  </p>
-  </div>
-
-<!-- this closes the section: keep it in! -->
 </section>
 
 
-{% endblock %}
+
+
+

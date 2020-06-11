@@ -1,0 +1,94 @@
+<link rel="stylesheet" type="text/css" href="/static/css/poster.css"/>
+<h1>PHASE 4</h1>
+<div class="navigation">
+    <a href="/index">Home</a>
+    <a href="/new">Make buggy</a>
+    <a href="/list">List buggies</a>
+    <a href="/buggy">Show buggy</a>
+    <a href="/json">Get buggy JSON</a>
+    <a href="/change-pass">Change password</a>
+    <a class="active" href="/poster">Poster</a>
+    <a href="/about">About</a>
+    <a href="/logout">Log out</a>
+</div>
+
+<nav class=nav>
+  <ul>
+    <li>
+      <a href="/poster">Sell Buggy</a>
+    </li>
+    <li>
+      <a href="/phase0">Phase 0</a>
+    </li>
+    <li>
+      <a href="/phase1">Phase 1</a>
+    </li>
+    <li>
+      <a href="/phase2">Phase 2</a>
+    </li>
+    <li>
+      <a href="/phase3">Phase 3</a>
+    </li>
+    <li>
+      <a class="current" href="/phase4">Phase 4</a>
+    </li>
+    <li>
+      <a href="/phase5">Phase 5</a>
+    </li>
+    <li>
+      <a href="/phase6">Phase 6</a>
+    </li>
+  </ul>
+  </nav>
+
+<section class="poster">
+    <div>
+        <h2>4-USERS Add users (and sessions) so not just anyone can edit a buggy</h2>
+        <p>
+            A new table called 'User' was added to the database which stores the user credentials. Fields include:
+            <code>username</code>, <code>password</code>, <code>privilege_level</code> and <code>email</code>.
+            The function <code>login()</code> in <code>app.py</code> reads the <code>User</code> table to match
+            the username and password before allowing access. I decided to code without using the Flask login library to
+            see if I can do it from scratch and I managed. The database has three users defines by default as described
+            in <code>INSTRUCTIONS.md</code>.
+        </p>
+        <p>
+            Sessions were added, so that a user cannot simply type in a url like:
+            <strong><a href="http://127.0.0.1:500/list">http://127.0.0.1:500/list</a></strong>
+            and visit the page without authentication.
+        </p>
+        <p>
+            <g>This part is tested to be working well.</g>
+        </p>
+    </div>
+
+  <br>
+    <div>
+        <h2>4-OWNER A buggy belongs to a user</h2>
+        <p>
+            A table called 'Ownership' is used to store the buggies owned by a user. Fields include: <code>username</code> and
+            <code>buggy_id</code>. This table has a foreign key username which references username in the User table and also a
+            primary key/foreign key <code>buggy_id</code> which references id in the Buggy table. When a user clicks on list buggies,
+            the Ownership table is queried together with the Buggy table to locate all buggies owned by a user and
+            displayed in a table. A user is then allowed to select any buggy for edit, delete, or for viewing a JSON.
+        </p>
+        <p>
+            <g>This part is tested to be working well.</g>
+        </p>
+    </div>
+
+  <br>
+    <div>
+        <h2>4-PASS Add password protection to the users</h2>
+        <p>
+            Originally, I coded plain text passwords to get things working. Later, I used the Python's <code>bcrypt</code> library to
+            salt and hash the passwords before storing them in the database. This was a relatively straightforward task.
+            When a user logs in, the username password is collected from the input form, the password is hashed and then
+            checked with a copy of that in the database. If the two hashes match, authentication is successful. For
+            security reasons, failed authentication does not give away any information as to which part of the
+            credential was incorrect. The login page is displayed again.
+        </p>
+            <g>This part is tested to be working well.</g>
+        </p>
+    </div>
+</section>
